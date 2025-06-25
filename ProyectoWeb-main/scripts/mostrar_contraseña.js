@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (mostrarPass && campoPass) {
         mostrarPass.addEventListener('change', function () {
-            campoPass.type = this.checked ? 'text' : 'password';
+            campoPass.type = this.checked ? 'email' : 'password';
         });
     }
 });

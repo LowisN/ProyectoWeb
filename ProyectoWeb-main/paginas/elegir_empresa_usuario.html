@@ -2,44 +2,39 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Elige Registro</title>
-    <link rel="stylesheet" href="./estilo/interfaz_iniciar_usuario.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="../estilo/interfaz_ini_usu_empre.css">
 </head>
-
 <body>
+  
     <div class="contenedor">
-       <div class="logo">
-            <img src="./imagenes/logo.png" alt="Logo">
+        <header>
+            <h2>Elige el tipo de registro:</h2>
+            
+            <div class="login-link">
+                <a href="../index.php">Tienes una cuenta? <br> ¡Inicia sesión aquí!</a>
+            </div>
+        </header>
+        <div class="registration-box">
+            <div class="options">
+                <div class="option">
+                    <h3>Elige esta opción para registrarte como usuario:</h3>
+                    <a href="./registro_candidato.php"><button class="register-btn" id="usuario">Regístrate como <br> Usuario</button></a>
+                </div>
+
+                <div class="divider"></div>
+    
+                <div class="option">
+                    <h3>Elige esta opción para registrarte como empresa:</h3>
+                    <button class="register-btn" id="empresa">Regístrate como <br> Empresa</button>
+                </div>
+            </div>
         </div>
-
-        <h1>Inicia Sesión en ChambaNet!</h1>
-        <form action="login.php" method="POST">
-
-            <label for="usuario">Usuario*</label>
-            <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu usuario" required>
-
-            <label for="contrasena">Contraseña*</label>
-            <input type="password" id="contrasena" name="contrasena" placeholder="Ingresa tu contraseña" required>
-
-            <label class="mostrar">
-                <input type="checkbox" id="mostrarPass">
-                Mostrar Contraseña
-            </label>
-
-            <script>
-                const mostrarPass = document.getElementById('mostrarPass');
-                const campoPass = document.getElementById('contrasena');
-                mostrarPass.addEventListener('change', function () {
-                campoPass.type = this.checked ? 'text' : 'password';
-                });
-            </script>
-            <button type="submit">Iniciar Sesión</button>
-        </form>
-
-        <div class="enlaces">
-            <a href="#">No tienes Usuario?<br>¡ Regístrate Aquí !</a>
-            <a href="#">¿Olvidaste tu contraseña?</a>
-        </div>
+        
     </div>
+      <div class="logo">
+                <img src="../imagenes/logo_transparente.png" alt="Logo">
+            </div>
 </body>
 </html>
