@@ -95,6 +95,13 @@
                 </div>
             </div>
             
+            <label class="mostrar">
+                <input type="checkbox" id="mostrarPass">
+                Mostrar Contraseña
+            </label>
+            
+            <script src="../scripts/mostrar_contraseña.js"></script>
+            
             <div class="form-group">
                 <label for="cargo">Cargo o puesto*</label>
                 <input type="text" id="cargo" name="cargo" placeholder="Cargo en la empresa" required>

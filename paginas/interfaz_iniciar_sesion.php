@@ -32,14 +32,14 @@
                 Mostrar Contraseña
             </label>
 
-            <script src="./scripts/mostrar_contraseña.js"></script>
+            <script src="../scripts/mostrar_contraseña.js"></script>
 
             <button type="submit">Iniciar Sesión</button>
         </form>
 
-        <div class="enlaces" id="enlacesIs">
-            <a href="../paginas/elegir_registro.php" target="_self" class="enlaces">No tienes Usuario?</br>¡ Regístrate Aquí !</a>
-            <a href="./recuperar_password.php" class="enlaces">¿Olvidaste tu contraseña?</a>
+        <div class="enlaces">
+            <a target="_self" href="elegir_registro.php">No tienes Usuario?<br>¡ Regístrate Aquí !</a>
+            <a href="recuperar_password.php">¿Olvidaste tu contraseña?</a>
         </div>
     </div>
 </body>

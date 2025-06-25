@@ -1,7 +1,7 @@
 <?php
 // Configuración de Supabase
-define('SUPABASE_URL', 'TU_URL_DE_SUPABASE');
-define('SUPABASE_KEY', 'TU_API_KEY_DE_SUPABASE');
+define('SUPABASE_URL', 'https://wklyvlosbiylfvovakly.supabase.co');
+define('SUPABASE_KEY', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrbHl2bG9zYml5bGZ2b3Zha2x5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MTI2ODIsImV4cCI6MjA2NjM4ODY4Mn0.fthVr-m8UkVX4tUW_zzdwhM6mgqohRbez-Oqek4efxo');
 
 // Función para inicializar cliente Supabase usando cURL
 function supabaseRequest($endpoint, $method = 'GET', $data = null) {
@@ -117,6 +117,80 @@ function supabaseResetPassword($email) {
     ];
     
     return supabaseRequest('/auth/v1/recover', 'POST', $data);
+}
+
+// Función para crear un usuario administrador
+function createAdminUser($email, $password, $userData) {
+    // 1. Registrar el usuario usando la API de autenticación
+    $signUpResponse = supabaseSignUp($email, $password, $userData);
+    
+    // Verificar si hay error
+    if (isset($signUpResponse['error'])) {
+        return [
+            'success' => false,
+            'error' => $signUpResponse['error'],
+            'message' => 'Error al crear el usuario en Auth',
+            'step' => 'signup'
+        ];
+    }
+    
+    // 2. Obtener el user_id del usuario recién creado
+    if (!isset($signUpResponse['id']) && !isset($signUpResponse['user']['id'])) {
+        return [
+            'success' => false,
+            'error' => 'No se pudo obtener el ID del usuario',
+            'response' => $signUpResponse,
+            'step' => 'get_id'
+        ];
+    }
+    
+    $userId = isset($signUpResponse['id']) ? $signUpResponse['id'] : $signUpResponse['user']['id'];
+    
+    // 3. Insertar en la tabla usuario
+    $insertUserData = [
+        'user_id' => $userId,
+        'nombre' => $userData['nombre'] ?? '',
+        'apellido_paterno' => $userData['apellido_paterno'] ?? '',
+        'apellido_materno' => $userData['apellido_materno'] ?? '',
+        'correo' => $email,
+        'telefono' => $userData['telefono'] ?? '',
+        'fecha_nacimiento' => $userData['fecha_nacimiento'] ?? date('Y-m-d')
+    ];
+    
+    $userInsertResponse = supabaseInsert('usuario', $insertUserData);
+    
+    if (isset($userInsertResponse['error'])) {
+        return [
+            'success' => false,
+            'error' => $userInsertResponse['error'],
+            'message' => 'Error al insertar en tabla usuario',
+            'step' => 'insert_usuario'
+        ];
+    }
+    
+    // 4. Insertar en la tabla perfiles como administrador
+    $insertProfileData = [
+        'user_id' => $userId,
+        'tipo_perfil' => 'administrador'
+    ];
+    
+    $profileInsertResponse = supabaseInsert('perfiles', $insertProfileData);
+    
+    if (isset($profileInsertResponse['error'])) {
+        return [
+            'success' => false,
+            'error' => $profileInsertResponse['error'],
+            'message' => 'Error al insertar en tabla perfiles',
+            'step' => 'insert_perfiles'
+        ];
+    }
+    
+    // Todo salió bien
+    return [
+        'success' => true,
+        'user_id' => $userId,
+        'message' => 'Usuario administrador creado exitosamente'
+    ];
 }
 
 // Función para cerrar sesión

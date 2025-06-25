@@ -59,6 +59,13 @@
                 </div>
             </div>
             
+            <label class="mostrar">
+                <input type="checkbox" id="mostrarPass">
+                Mostrar Contraseña
+            </label>
+            
+            <script src="../scripts/mostrar_contraseña.js"></script>
+            
             <h2>Datos personales</h2>
             
             <div class="form-row">
