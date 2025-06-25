@@ -1,4 +1,5 @@
 <?php
+/*
 session_start();
 require_once '../../config/supabase.php';
 
@@ -28,7 +29,7 @@ if (empty($candidatoData) || isset($candidatoData['error'])) {
 // Obtener vacantes recomendadas
 $vacantes = supabaseFetch('vacantes', '*');
 // En un caso real, aquí se filtrarían las vacantes según los conocimientos del candidato
-
+*/
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +47,9 @@ $vacantes = supabaseFetch('vacantes', '*');
     <div class="contenedor dashboard">
         <div class="sidebar">
             <div class="user-info">
-                <img src="../../imagenes/user-default.png" alt="Foto de perfil">
+                <?php $_SESSION['user']['user_metadata']['nombre'] = '0'?>
+                <?php $_SESSION['user']['user_metadata']['apellidos'] = '0'?>
+                <img src="../../imagenes/logo.png" alt="Foto de perfil">
                 <h3><?php echo htmlspecialchars($_SESSION['user']['user_metadata']['nombre'] . ' ' . $_SESSION['user']['user_metadata']['apellidos']); ?></h3>
             </div>
             
@@ -62,9 +65,9 @@ $vacantes = supabaseFetch('vacantes', '*');
             </div>
         </div>
         
-        <div class="content">
+        <div class="content" id="cntC">
             <div class="welcome-banner">
-                <h2>¡Bienvenido, <?php echo htmlspecialchars($_SESSION['user']['user_metadata']['nombre']); ?>!</h2>
+                <h2 id="titB">¡Bienvenido, <?php echo htmlspecialchars($_SESSION['user']['user_metadata']['nombre']); ?>!</h2>
                 <p>Estas son las vacantes que coinciden con tu perfil profesional.</p>
             </div>
             
