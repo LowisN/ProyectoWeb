@@ -18,8 +18,13 @@
         if (isset($_GET['error'])) {
             echo '<p class="error-message">' . htmlspecialchars($_GET['error']) . '</p>';
         }
+        
+        // Verificar si hay mensajes de éxito
+        if (isset($_GET['success'])) {
+            echo '<p class="success-message">' . htmlspecialchars($_GET['success']) . '</p>';
+        }
         ?>
-        <form action="../controllers/login_controller.php" method="POST">
+        <form action="controllers/login_controller.php" method="POST">
 
             <label for="email">Correo electrónico*</label>
             <input type="email" id="email" name="email" placeholder="Ingresa tu correo" required>
