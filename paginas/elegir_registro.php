@@ -34,7 +34,7 @@
             </div>
         </div>
         
-        <a href="interfaz_iniciar_sesion.php" class="enlaces">Volver a Inicio de Sesión</a>
+        <a href="../index.php" class="enlaces">Volver a Inicio de Sesión</a>
     </div>
 </body>
 </html>
