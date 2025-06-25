@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="../estilo/interfaz_iniciar_usuario.css">
 </head>
 
-<body>
+<body class="sinMar">
     <div class="contenedor">
        <div class="logo">
-            <img src="./imagenes/logo.png" alt="Logo">
+            <img src="../imagenes/logo.png" alt="Logo">
         </div>
 
         <h1>Inicia Sesión en ChambaNet!</h1>
@@ -37,9 +37,9 @@
             <button type="submit">Iniciar Sesión</button>
         </form>
 
-        <div class="enlaces">
-            <a href="elegir_registro.php" target="_self">No tienes Usuario?</br>¡ Regístrate Aquí !</a>
-            <a href="recuperar_password.php">¿Olvidaste tu contraseña?</a>
+        <div class="enlaces" id="enlacesIs">
+            <a href="../paginas/elegir_registro.php" target="_self" class="enlaces">No tienes Usuario?</br>¡ Regístrate Aquí !</a>
+            <a href="./recuperar_password.php" class="enlaces">¿Olvidaste tu contraseña?</a>
         </div>
     </div>
 </body>

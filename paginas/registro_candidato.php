@@ -89,13 +89,17 @@
                 <label for="experiencia">Años de experiencia*</label>
                 <input type="number" id="experiencia" name="experiencia" min="0" placeholder="Años de experiencia en el área" required>
             </div>
+            <div class="form-group">
+                <label for="curriculum">Currículum Vitae *</label>
+                <input type="file" id="curriculum" name="curriculum" accept=".pdf,.doc,.docx" required>
+            </div>
             
             <p>* Campos obligatorios</p>
             
             <button type="submit">Registrarse</button>
         </form>
         
-        <a href="elegir_registro.php" class="volver">Volver</a>
+        <a href="elegir_registro.php" class="enlaces">Volver</a>
     </div>
 </body>
 </html>

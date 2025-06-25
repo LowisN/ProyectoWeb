@@ -105,7 +105,7 @@
             <button type="submit">Registrar Empresa</button>
         </form>
         
-        <a href="elegir_registro.php" class="volver">Volver</a>
+        <a href="elegir_registro.php" class="enlaces">Volver</a>
     </div>
 </body>
 </html>

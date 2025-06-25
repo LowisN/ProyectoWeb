@@ -38,7 +38,7 @@
             <button type="submit">Enviar correo de recuperación</button>
         </form>
         
-        <a href="interfaz_iniciar_sesion.php" class="volver">Volver a Inicio de Sesión</a>
+        <a href="interfaz_iniciar_sesion.php" class="enlaces">Volver a Inicio de Sesión</a>
     </div>
 </body>
 </html>
