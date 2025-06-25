@@ -43,7 +43,7 @@ $vacantes = supabaseFetch('vacantes', '*');
     <link rel="stylesheet" href="../../estilo/candidato_dashboard.css">
 </head>
 
-<body>
+<body class="sinMar">
     <div class="contenedor dashboard">
         <div class="sidebar">
             <div class="user-info">

@@ -10,6 +10,16 @@ body {
 .sinMar{
     margin: 0;
 }
+#canDash{
+    display: flex;
+    position: relative;
+    flex-direction: row;
+   
+    align-content: stretch;
+    justify-content: center;
+    align-items: center;
+    width: 800px;
+}
 
 .contenedor {
 
@@ -26,8 +36,7 @@ body {
     text-align: center;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.199);
     border: none;
-    /* ya no necesitamos borde sólido */
-    margin-top: 20px;
+    margin-top: 50px;
 
 }
 #titB,#ttitB {
@@ -49,7 +58,7 @@ label {
 input[type="email"], input[type="text"], input[type="tel"], input[type="date"], input[type="number"],
 input[type="password"], input[type="url"], input[type="file"] {
 
-    width: 100%;
+    width: 90%;
     padding: 10px;
     border-radius: 20px;
     border: 1px solid #ccc;
