@@ -20,21 +20,17 @@ body {
 
 .contenedor {
 
-    background: linear-gradient(
+    background: linear-gradient(to bottom,
 
-        to bottom,
+            #d9d6d6 10%,
+            /* gris claro superior */
 
-        #d9d6d6 10%,     /* gris claro superior */
+            #eeecec 30%,
+            /* centro blanco */
 
-        #eeecec 30%,    /* centro blanco */
+            #ffffff 97%,
 
-        #ffffff 97%,
-
-        #e1322f 100%
-
-
-
-    );
+            #e1322f 100%);
 
     border-radius: 10px;
 
@@ -44,9 +40,10 @@ body {
 
     text-align: center;
 
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 
-    border: none; /* ya no necesitamos borde sólido */
+    border: none;
+    /* ya no necesitamos borde sólido */
 
 }
 

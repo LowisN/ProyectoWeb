@@ -1,0 +1,53 @@
+.vacantes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.vacante-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.vacante-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.vacante-card h3 {
+    color: #d63d3d;
+    margin-top: 0;
+}
+
+.vacante-card .empresa {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.vacante-card .detalles {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.vacante-card .match {
+    background-color: #d63d3d;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+}
+
+.vacante-card .acciones {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.vacante-card .acciones a {
+    color: #d63d3d;
+    text-decoration: none;
+}

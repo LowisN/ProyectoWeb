@@ -1,0 +1,72 @@
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.form-row > div {
+    flex: 0 0 48%;
+}
+
+@media (max-width: 600px) {
+    .form-row > div {
+        flex: 0 0 100%;
+    }
+}
+
+.error-message {
+    color: #d63d3d;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.success-message {
+    color: #155724;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.opciones-registro {
+    display: flex;
+    justify-content: space-around;
+    margin: 30px 0;
+}
+
+.opcion {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 40%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.opcion:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.opcion h3 {
+    color: #d63d3d;
+    margin-bottom: 10px;
+}
+
+.opcion p {
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.volver {
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+}

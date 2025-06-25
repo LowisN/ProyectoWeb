@@ -1,0 +1,50 @@
+.skills-category {
+    margin-bottom: 20px;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.skill-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.skill-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.skill-name input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.skill-rating {
+    display: flex;
+    justify-content: space-between;
+}
+
+.skill-level {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.skill-rating label,
+.skill-level label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.skill-rating input[type="radio"],
+.skill-level input[type="radio"] {
+    margin-right: 5px;
+}
