@@ -2,7 +2,7 @@ body {
 
     font-family: Arial, sans-serif;
 
-    background: linear-gradient(to top right, #e1322f, #f6a8a8);
+    background: linear-gradient(to top right, #ff0400, #f08d8d, #ffffff);
 
     display: flex;
 
@@ -40,7 +40,7 @@ body {
 
     text-align: center;
 
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.199);
 
     border: none;
     /* ya no necesitamos borde sólido */
