@@ -4,7 +4,7 @@ require_once '../../config/supabase.php';
 
 // Verificar si el usuario está autenticado y es un reclutador
 if (!isset($_SESSION['access_token']) || !isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'reclutador') {
-    header('Location: ../interfaz_iniciar_sesion.php');
+    header('Location: ../../index.php');
     exit;
 }
 
@@ -13,7 +13,7 @@ $userId = $_SESSION['user']['id'];
 $userProfile = supabaseFetch('perfiles', '*', ['user_id' => $userId]);
 
 if (empty($userProfile) || isset($userProfile['error'])) {
-    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar el perfil');
+    header('Location: ../../index.php?error=Error al cargar el perfil');
     exit;
 }
 
@@ -21,7 +21,7 @@ if (empty($userProfile) || isset($userProfile['error'])) {
 $reclutadorData = supabaseFetch('reclutadores', '*', ['perfil_id' => $userProfile[0]['id']]);
 
 if (empty($reclutadorData) || isset($reclutadorData['error'])) {
-    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos del reclutador');
+    header('Location: ../../index.php?error=Error al cargar datos del reclutador');
     exit;
 }
 
@@ -29,7 +29,7 @@ if (empty($reclutadorData) || isset($reclutadorData['error'])) {
 $empresaData = supabaseFetch('empresas', '*', ['id' => $reclutadorData[0]['empresa_id']]);
 
 if (empty($empresaData) || isset($empresaData['error'])) {
-    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos de la empresa');
+    header('Location: ../../index.php?error=Error al cargar datos de la empresa');
     exit;
 }
 

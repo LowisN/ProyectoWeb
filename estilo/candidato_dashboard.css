@@ -42,7 +42,3 @@
     transition: background-color 0.3s;
 }
 
-.sidebar .nav-menu li a:hover,
-.sidebar .nav-menu li a.active {
-    background-color: #d63d3d;
-    color:                                           
