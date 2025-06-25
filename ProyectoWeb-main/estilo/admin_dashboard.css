@@ -1,0 +1,154 @@
+.admin-dashboard {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 20px;
+}
+
+.sidebar {
+    background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sidebar .admin-info {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar .admin-info img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #d63d3d;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.sidebar .nav-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar .nav-menu li {
+    margin-bottom: 10px;
+}
+
+.sidebar .nav-menu li a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar .nav-menu li a:hover,
+.sidebar .nav-menu li a.active {
+    background-color: #d63d3d;
+    color: white;
+}
+
+.content {
+    padding: 20px;
+}
+
+.content h2 {
+    color: #d63d3d;
+    margin-bottom: 20px;
+}
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.stat-card h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.stat-card .number {
+    font-size: 28px;
+    font-weight: bold;
+    color: #d63d3d;
+    margin: 10px 0;
+}
+
+.admin-tables {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-table th {
+    background-color: #f8f8f8;
+    color: #333;
+    font-weight: bold;
+}
+
+.admin-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.actions-column {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+
+.action-btn-edit {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.action-btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.action-btn-view {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.logout {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.logout a {
+    color: #d63d3d;
+    text-decoration: none;
+}
