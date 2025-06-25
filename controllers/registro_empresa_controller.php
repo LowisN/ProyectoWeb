@@ -60,19 +60,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Crear perfil de reclutador
     $perfilData = [
         'user_id' => $userId,
-        'tipo_usuario' => 'reclutador'
+        'email' => $email, // Guardar el email para facilitar búsquedas
+        'tipo_usuario' => 'reclutador',
+        'tipo_perfil' => 'reclutador', // Asegurar consistencia en ambos campos
+        'nombre' => $nombre_reclutador,
+        'apellidos' => $apellidos_reclutador,
+        'fecha_creacion' => date('Y-m-d H:i:s')
     ];
+    
+    // Registrar información de diagnóstico antes de la inserción
+    error_log("Intentando crear perfil para usuario reclutador: $userId con email: $email");
+    error_log("Datos del perfil a insertar: " . print_r($perfilData, true));
     
     $perfilResponse = supabaseInsert('perfiles', $perfilData);
     
-    // Comprobar si hay errores al crear el perfil
+    // Si hay un error, registrar información detallada
     if (isset($perfilResponse['error'])) {
-        header('Location: ../paginas/registro_empresa.php?error=Error al crear el perfil de usuario');
+        error_log("Error al crear perfil para $email: " . print_r($perfilResponse['error'], true));
+        header('Location: ../paginas/registro_empresa.php?error=Error al crear el perfil de usuario: ' . urlencode($perfilResponse['error']['message'] ?? 'Error desconocido'));
         exit;
     }
     
-    // Obtener el ID del perfil recién creado
-    $perfilId = $perfilResponse[0]['id'];
+    // Verificar que la respuesta tiene la estructura esperada
+    if (!isset($perfilResponse[0]) || !isset($perfilResponse[0]['id'])) {
+        error_log("Respuesta inesperada al crear perfil de reclutador: " . print_r($perfilResponse, true));
+        
+        // Intentar recuperar el perfil por user_id
+        $checkPerfil = supabaseFetch('perfiles', '*', ['user_id' => $userId]);
+        if (!empty($checkPerfil) && isset($checkPerfil[0]['id'])) {
+            $perfilId = $checkPerfil[0]['id'];
+            error_log("Perfil de reclutador recuperado mediante consulta alternativa. ID: $perfilId");
+        } else {
+            error_log("No se pudo recuperar el perfil de reclutador. Respuesta de la consulta: " . print_r($checkPerfil, true));
+            header('Location: ../paginas/registro_empresa.php?error=Error al crear el perfil de usuario: Estructura de respuesta inválida');
+            exit;
+        }
+    } else {
+        // Obtener el ID del perfil recién creado
+        $perfilId = $perfilResponse[0]['id'];
+        error_log("Perfil de reclutador creado correctamente con ID: $perfilId");
+    }
     
     // Crear datos de la empresa
     $empresaData = [

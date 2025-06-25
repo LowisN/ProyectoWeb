@@ -10,6 +10,23 @@
     <title>Registro de Candidato - ChambaNet</title>
     <link rel="stylesheet" href="../estilo/interfaz_iniciar_usuario.css">
     <link rel="stylesheet" href="../estilo/formularios.css">
+    <style>
+        .diagnostic-links {
+            font-size: 0.9em;
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .diagnostic-links a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        .diagnostic-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,7 +40,17 @@
         <?php
         // Verificar si hay mensajes de error
         if (isset($_GET['error'])) {
-            echo '<p class="error-message">' . htmlspecialchars($_GET['error']) . '</p>';
+            $errorMsg = $_GET['error'];
+            echo '<p class="error-message">' . $errorMsg . '</p>';
+            
+            // Si hay un error grave, mostrar enlace a herramienta de diagnóstico
+            if (strpos($errorMsg, 'Error al crear') !== false || strpos($errorMsg, 'Error al registrar') !== false) {
+                echo '<p class="diagnostic-links">
+                    ¿Problemas al registrarte? Prueba estas herramientas:
+                    <a href="../config/verificar_conexion_supabase.php">Verificar conexión</a> | 
+                    <a href="../config/verificar_tablas.php">Verificar tablas</a>
+                </p>';
+            }
         }
         ?>
         

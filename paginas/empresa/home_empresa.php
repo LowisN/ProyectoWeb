@@ -1,25 +1,39 @@
 <?php
-/*
 session_start();
 require_once '../../config/supabase.php';
+require_once '../../helpers/auth_helper.php';
 
 // Verificar si el usuario está autenticado y es un reclutador
-if (!isset($_SESSION['access_token']) || !isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'reclutador') {
-    header('Location: ../interfaz_iniciar_sesion.php');
-    exit;
-}
+verificarAcceso('reclutador', '../interfaz_iniciar_sesion.php');
 
 // Obtener información del usuario actual
 $userId = $_SESSION['user']['id'];
 $userProfile = supabaseFetch('perfiles', '*', ['user_id' => $userId]);
 
-if (empty($userProfile) || isset($userProfile['error'])) {
-    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar el perfil');
+// Verificar errores explícitos en la respuesta
+if (isset($userProfile['error'])) {
+    error_log("Error en supabaseFetch de perfiles para empresa: " . print_r($userProfile['error'], true));
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar el perfil: ' . urlencode($userProfile['error']));
+    exit;
+}
+
+// Verificar que userProfile tiene la estructura esperada (array con al menos un elemento)
+if (empty($userProfile) || !is_array($userProfile)) {
+    error_log("El perfil del usuario $userId no existe o no es un array: " . gettype($userProfile));
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar el perfil: no se encontró el perfil de usuario');
+    exit;
+}
+
+// Verificar que existe el elemento 0 en el array y tiene un id
+if (!isset($userProfile[0]) || !isset($userProfile[0]['id'])) {
+    error_log("Estructura de userProfile inválida: " . print_r($userProfile, true));
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar el perfil: estructura de datos inválida');
     exit;
 }
 
 // Obtener datos del reclutador
-$reclutadorData = supabaseFetch('reclutadores', '*', ['perfil_id' => $userProfile[0]['id']]);
+$perfilId = $userProfile[0]['id']; // Ya sabemos que existe gracias a la validación anterior
+$reclutadorData = supabaseFetch('reclutadores', '*', ['perfil_id' => $perfilId]);
 
 if (empty($reclutadorData) || isset($reclutadorData['error'])) {
     header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos del reclutador');
@@ -36,7 +50,6 @@ if (empty($empresaData) || isset($empresaData['error'])) {
 
 // Obtener vacantes de la empresa
 $vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id']]);
-*/
 ?>
 
 <!DOCTYPE html>
