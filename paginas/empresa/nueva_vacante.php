@@ -1,4 +1,5 @@
-<?php
+<?php 
+/*
 session_start();
 require_once '../../config/supabase.php';
 
@@ -181,7 +182,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Refresh: 2; URL=home_empresa.php');
         }
     }
-}
+} 
+    */
+
 ?>
 
 <!DOCTYPE html>
