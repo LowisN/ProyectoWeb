@@ -38,6 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
+    // Verificar longitud del RFC
+    if (strlen($rfc) > 13) {
+        header('Location: ../paginas/registro_empresa.php?error=El RFC no puede exceder los 13 caracteres');
+        exit;
+    }
+    
     // Registrar usuario en Supabase Auth
     $userData = [
         'nombre' => $nombre_reclutador,

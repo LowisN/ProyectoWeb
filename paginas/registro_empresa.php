@@ -37,8 +37,9 @@
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="rfc">RFC*</label>
-                    <input type="text" id="rfc" name="rfc" placeholder="RFC de la empresa" required>
+                    <label for="rfc">RFC* (máximo 13 caracteres)</label>
+                    <input type="text" id="rfc" name="rfc" placeholder="RFC de la empresa" maxlength="13" required>
+                    <small>El RFC no debe exceder los 13 caracteres.</small>
                 </div>
                 
                 <div class="form-group">
@@ -108,4 +109,24 @@
         <a href="elegir_registro.php" class="enlaces">Volver</a>
     </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Script para mostrar caracteres restantes en el campo RFC
+        var rfcInput = document.getElementById('rfc');
+        var smallElement = rfcInput.nextElementSibling;
+        
+        rfcInput.addEventListener('input', function() {
+            var remaining = 13 - this.value.length;
+            smallElement.textContent = remaining > 0 ? 
+                `El RFC no debe exceder los 13 caracteres. Te quedan ${remaining} caracteres.` : 
+                'Has alcanzado el límite de 13 caracteres.';
+                
+            if (remaining <= 3) {
+                smallElement.style.color = 'red';
+            } else {
+                smallElement.style.color = '';
+            }
+        });
+    });
+</script>
 </html>
