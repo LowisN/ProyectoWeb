@@ -43,7 +43,7 @@
         </form>
 
         <div class="enlaces" id="enlacesIs">
-            <a href="paginas/elegir_registro.php" target="_self" class="enlaces">No tienes Usuario?<br>¡ Regístrate Aquí !</a>
+            <a href="paginas/elegir_registro.php" target="_self" class="enlaces">¿No tienes Usuario?<br>¡Regístrate Aquí!</a>
             <a href="paginas/recuperar_password.php" class="enlaces">¿Olvidaste tu contraseña?</a>
         </div>
     </div>

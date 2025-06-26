@@ -78,7 +78,7 @@
 
         </form>
         
-        <a href="elegir_registro.php" class="enlaces">Volver</a>
+        <a href="../registro_candidato.php" class="enlaces">Volver</a>
     </div>
 </body>
 </html>
