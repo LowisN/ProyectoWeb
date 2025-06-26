@@ -1,0 +1,96 @@
+/* Corrección para el dashboard de vacantes */
+.contenedor.dashboard {
+    height: auto !important;
+    min-height: 100vh;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 100vh;
+    background: linear-gradient(to top right, #ff0400, #f08d8d, #ffffff);
+}
+
+.content {
+    padding: 20px;
+    margin-left: 0;
+    overflow-y: auto;
+}
+
+.sidebar {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+}
+
+/* Responsividad para el dashboard */
+@media (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        position: static;
+        height: auto;
+    }
+}
+
+/* Asegurar que los formularios tengan buen espacio */
+.section {
+    margin-bottom: 30px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Asegurar que los skills-grid no se desborden */
+.skills-grid {
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+/* Arreglar problemas de margen */
+.content h2 {
+    margin-top: 0;
+}
+
+/* Botón de submit al final */
+button[type="submit"] {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* Botón de scroll hacia arriba */
+#scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #d63d3d;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: none;
+    z-index: 999;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+}
+
+#scroll-to-top:hover {
+    background-color: #b82e2e;
+}
+
+/* Asegurarse de que el contenido no se corte y sea completo */
+html, body {
+    overflow-x: hidden;
+}

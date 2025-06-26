@@ -194,6 +194,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../estilo/formularios.css">
     <link rel="stylesheet" href="../../estilo/conocimientos.css">
     <link rel="stylesheet" href="../../estilo/empresa_dashboard.css">
+    <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -323,7 +325,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <button type="submit">Publicar Vacante</button>
             </form>
+            
+            <div id="scroll-to-top">↑</div>
         </div>
     </div>
+
+    <script>
+        // Script para el botón de scroll hacia arriba
+        document.addEventListener('DOMContentLoaded', function() {
+            var scrollBtn = document.getElementById('scroll-to-top');
+            
+            // Mostrar/ocultar el botón basado en la posición del scroll
+            window.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    scrollBtn.style.display = 'block';
+                } else {
+                    scrollBtn.style.display = 'none';
+                }
+            });
+            
+            // Scroll hacia arriba al hacer clic en el botón
+            scrollBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
