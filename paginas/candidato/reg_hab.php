@@ -176,33 +176,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mis Conocimientos - ChambaNet</title>
+    <title>Registro de Candidato - ChambaNet</title>
     <link rel="stylesheet" href="../../estilo/interfaz_iniciar_usuario.css">
-    <link rel="stylesheet" href="../../estilo/dashboard.css">
-    <link rel="stylesheet" href="../../estilo/conocimientos.css">
-    <link rel="stylesheet" href="../../estilo/candidato_dashboard.css">
+    <link rel="stylesheet" href="../../estilo/formularios.css">
 </head>
 
 <body>
-    <div class="contenedor dashboard">
-        <div class="sidebar">
-            <div class="user-info">
-                <img src="../../imagenes/user-default.png" alt="Foto de perfil">
-                <h3><?php echo htmlspecialchars($_SESSION['user']['user_metadata']['nombre'] . ' ' . $_SESSION['user']['user_metadata']['apellidos']); ?></h3>
-            </div>
-            
-            <ul class="nav-menu">
-                <li><a href="home_candidato.php">Inicio</a></li>
-                <li><a href="actualizar_perfil.php">Mi Perfil</a></li>
-                <li><a href="mis_postulaciones.php">Mis Postulaciones</a></li>
-                <li><a href="#" class="active">Mis Conocimientos</a></li>
-            </ul>
-            
-            <div class="logout">
-                <a href="../../controllers/logout_controller.php">Cerrar Sesión</a>
-            </div>
+    <div class="contenedor">
+        <div class="logo">
+            <img src="../../imagenes/logo.png" alt="Logo ChambaNet">
         </div>
         
+        <h1>Registro de Candidato</h1>
+        
+        <?php
+        // Verificar si hay mensajes de error
+        if (isset($_GET['error'])) {
+            echo '<p class="error-message">' . htmlspecialchars($_GET['error']) . '</p>';
+        }
+        ?>
         <div class="content">
             <h2>Mis Conocimientos y Habilidades</h2>
             
@@ -249,6 +241,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit">Guardar Conocimientos</button>
             </form>
         </div>
-    </div>
+    </div>   
 </body>
 </html>
