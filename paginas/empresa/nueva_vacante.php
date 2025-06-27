@@ -1,6 +1,8 @@
 <?php 
 session_start();
 require_once '../../config/supabase.php';
+require_once '../../config/SupabaseClient.php';
+require_once '../../models/habilidades.php';
 
 // Verificar si el usuario está autenticado y es un reclutador
 if (!isset($_SESSION['access_token']) || !isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'reclutador') {
@@ -33,69 +35,107 @@ if (empty($empresaData) || isset($empresaData['error'])) {
     exit;
 }
 
-// Definir las tecnologías y conocimientos para seleccionar
-$habilidades = [
-    'protocolos_red' => [
-        'TCP/IP',
-        'UDP',
-        'HTTP/HTTPS',
-        'DNS',
-        'DHCP',
-        'FTP',
-        'SMTP',
-        'POP3/IMAP',
-        'SSH',
-        'RDP'
-    ],
-    'dispositivos_red' => [
-        'Routers',
-        'Switches',
-        'Firewalls',
-        'Access Points',
-        'Load Balancers',
-        'Modems',
-        'Repeaters',
-        'VPN Concentrators',
-        'Network Bridges',
-        'Gateways'
-    ],
-    'seguridad_redes' => [
-        'VPN',
-        'Encrypting',
-        'Firewalls Hardware',
-        'Firewalls Software',
-        'IDS/IPS',
-        'Network Monitoring',
-        'Penetration Testing',
-        'SSL/TLS',
-        'Authentication Systems',
-        'Network Security Policies'
-    ],
-    'software' => [
-        'Cisco IOS',
-        'Wireshark',
-        'Nmap',
-        'PuTTY',
-        'GNS3',
-        'SolarWinds',
-        'Nagios',
-        'OpenVPN',
-        'VMware',
-        'Packet Tracer'
-    ],
-    'certificaciones' => [
-        'CCNA',
-        'CCNP',
-        'CompTIA Network+',
-        'CompTIA Security+',
-        'CISSP',
-        'CISM',
-        'JNCIA',
-        'AWS Certified Networking',
-        'Microsoft Certified: Azure Network Engineer',
-        'Fortinet NSE'
-    ]
-];
+// Obtener las habilidades de la base de datos
+$habilidadesManager = new Habilidades();
+$habilidades = [];
+
+// Intentar con ambos métodos para asegurar que obtenemos datos
+try {
+    // Primer intento con la clase Habilidades
+    $habilidades = $habilidadesManager->obtenerHabilidadesPorCategoria();
+    error_log("Habilidades obtenidas por categoría: " . count($habilidades) . " categorías");
+    
+    // Si no hay habilidades o están vacías, intentar con método alternativo
+    if (empty($habilidades) || count($habilidades) == 0) {
+        // Intentar obtener directamente usando supabaseFetch
+        error_log("No se encontraron categorías. Intentando con supabaseFetch");
+        $resultado = supabaseFetch('habilidades', '*');
+        
+        if (is_array($resultado) && !empty($resultado)) {
+            error_log("supabaseFetch: Encontradas " . count($resultado) . " habilidades");
+            $porCategoria = [];
+            
+            foreach ($resultado as $habilidad) {
+                $categoria = $habilidad['categoria'] ?? 'otras_habilidades';
+                if (!isset($porCategoria[$categoria])) {
+                    $porCategoria[$categoria] = [];
+                }
+                $porCategoria[$categoria][] = (object)$habilidad;
+            }
+            
+            $habilidades = $porCategoria;
+        }
+    }
+} catch (Exception $e) {
+    error_log("Error al obtener habilidades: " . $e->getMessage());
+}
+
+// Si no hay habilidades en la base de datos, usar habilidades predefinidas
+if (empty($habilidades)) {
+    error_log("No se encontraron habilidades en la base de datos. Usando habilidades predefinidas.");
+    $habilidades = [
+        'protocolos_red' => [
+            'TCP/IP',
+            'UDP',
+            'HTTP/HTTPS',
+            'DNS',
+            'DHCP',
+            'FTP',
+            'SMTP',
+            'POP3/IMAP',
+            'SSH',
+            'RDP'
+        ],
+        'dispositivos_red' => [
+            'Routers',
+            'Switches',
+            'Firewalls',
+            'Access Points',
+            'Load Balancers',
+            'Modems',
+            'Repeaters',
+            'VPN Concentrators',
+            'Network Bridges',
+            'Gateways'
+        ],
+        'seguridad_redes' => [
+            'VPN',
+            'Encrypting',
+            'Firewalls Hardware',
+            'Firewalls Software',
+            'IDS/IPS',
+            'Network Monitoring',
+            'Penetration Testing',
+            'SSL/TLS',
+            'Authentication Systems',
+            'Network Security Policies'
+        ],
+        'software' => [
+            'Cisco IOS',
+            'Wireshark',
+            'Nmap',
+            'PuTTY',
+            'GNS3',
+            'SolarWinds',
+            'Nagios',
+            'OpenVPN',
+            'VMware',
+            'Packet Tracer'
+        ],
+        'certificaciones' => [
+            'CCNA',
+            'CCNP',
+            'CompTIA Network+',
+            'CompTIA Security+',
+            'CISSP',
+            'CISM',
+            'JNCIA',
+            'AWS Certified Networking',
+            'Microsoft Certified: Azure Network Engineer',
+            'Fortinet NSE'
+        ]
+    ];
+}
 
 // Procesar el formulario si se ha enviado
 $successMessage = '';
@@ -147,23 +187,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             foreach ($habilidades as $categoria => $tecnologias) {
                 foreach ($tecnologias as $tecnologia) {
-                    $tecnologiaKey = str_replace(['/', ' ', '-'], '_', strtolower($tecnologia));
+                    // Manejar tanto objetos como strings
+                    if (is_object($tecnologia)) {
+                        $tecnologiaNombre = $tecnologia->nombre ?? null;
+                        $tecnologiaId = $tecnologia->id ?? null;
+                    } elseif (is_array($tecnologia)) {
+                        $tecnologiaNombre = $tecnologia['nombre'] ?? $tecnologia[0] ?? null;
+                        $tecnologiaId = $tecnologia['id'] ?? null;
+                    } else {
+                        $tecnologiaNombre = $tecnologia;
+                        $tecnologiaId = null;
+                    }
+                    
+                    // Si no pudimos obtener el nombre de la tecnología, continuar con el siguiente
+                    if (!$tecnologiaNombre) continue;
+                    
+                    $tecnologiaKey = str_replace(['/', ' ', '-', '.'], '_', strtolower($tecnologiaNombre));
                     
                     // Si se requiere esta tecnología
                     if (isset($_POST['req_' . $tecnologiaKey]) && $_POST['req_' . $tecnologiaKey] == 'on') {
-                        $nivel = isset($_POST['nivel_' . $tecnologiaKey]) ? filter_input(INPUT_POST, 'nivel_' . $tecnologiaKey, FILTER_SANITIZE_STRING) : 'regular';
+                        $nivel = isset($_POST['nivel_' . $tecnologiaKey]) ? filter_input(INPUT_POST, 'nivel_' . $tecnologiaKey, FILTER_SANITIZE_STRING) : 'intermedio';
                         
-                        // Validar nivel
-                        if (!in_array($nivel, ['malo', 'regular', 'bueno'])) {
-                            $nivel = 'regular';
+                        // Validar nivel según el constraint de la base de datos
+                        if (!in_array($nivel, ['principiante', 'intermedio', 'avanzado', 'experto'])) {
+                            $nivel = 'intermedio';
                         }
                         
                         // Preparar datos para insertar
                         $requisitoData = [
                             'vacante_id' => $vacanteId,
-                            'tecnologia' => $tecnologia,
+                            'tecnologia' => $tecnologiaNombre,
                             'nivel_requerido' => $nivel
                         ];
+                        
+                        // Si tenemos el ID de la habilidad, guardarlo también
+                        if ($tecnologiaId !== null) {
+                            $requisitoData['habilidad_id'] = $tecnologiaId;
+                        }
                         
                         // Insertar requisito
                         $requisitoResponse = supabaseInsert('requisitos_vacante', $requisitoData);
@@ -183,7 +243,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } 
 
-
 ?>
 
 <!DOCTYPE html>
@@ -198,6 +257,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../estilo/empresa_dashboard.css">
     <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .skills-category {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        
+        .skills-category h4 {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            margin-bottom: 15px;
+            text-transform: capitalize;
+        }
+        
+        .skill-name {
+            position: relative;
+            cursor: help;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-icon {
+            font-size: 0.8em;
+            color: #007bff;
+            margin-left: 5px;
+            vertical-align: super;
+        }
+        
+        /* Mejoras para la visualización en mobile */
+        @media (max-width: 768px) {
+            .skill-item {
+                padding: 10px 0;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .skill-level {
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: 5px;
+            }
+            
+            .skill-level label {
+                margin-right: 10px;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -205,8 +312,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="sidebar">
             <div class="company-info">
                 <img src="../../imagenes/logo.png" alt="Logo de la empresa">
-                <!-- <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3> -->
-                <!-- <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p> -->
+                <h3><?php echo isset($empresaData[0]['nombre']) ? htmlspecialchars($empresaData[0]['nombre']) : 'Empresa'; ?></h3>
+                <p><?php 
+                    echo htmlspecialchars($nombreCompleto);
+                ?></p>
             </div>
             
             <ul class="nav-menu">
@@ -291,31 +400,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h3>Conocimientos y Tecnologías Requeridas</h3>
                     <p>Selecciona las tecnologías que requiere la vacante y el nivel mínimo necesario:</p>
                     
-                    <?php foreach ($habilidades as $categoria => $tecnologias): ?>
+                    <?php 
+                    // Ordenar categorías alfabéticamente para mejor presentación
+                    ksort($habilidades);
+                    
+                    foreach ($habilidades as $categoria => $tecnologias): 
+                        // Saltarse categorías vacías
+                        if (empty($tecnologias)) continue;
+                    ?>
                         <div class="skills-category">
                             <h4><?php echo ucfirst(str_replace('_', ' ', $categoria)); ?></h4>
                             
                             <div class="skills-grid">
-                                <?php foreach ($tecnologias as $tecnologia): ?>
-                                    <?php $tecnologiaKey = str_replace(['/', ' ', '-'], '_', strtolower($tecnologia)); ?>
+                                <?php 
+                                // Ordenar alfabéticamente las habilidades dentro de cada categoría
+                                usort($tecnologias, function($a, $b) {
+                                    $nombreA = is_object($a) ? ($a->nombre ?? '') : (is_array($a) ? ($a['nombre'] ?? '') : $a);
+                                    $nombreB = is_object($b) ? ($b->nombre ?? '') : (is_array($b) ? ($b['nombre'] ?? '') : $b);
+                                    return strcmp($nombreA, $nombreB);
+                                });
+                                
+                                foreach ($tecnologias as $tecnologia): 
+                                    // Manejar diferentes formatos posibles
+                                    if (is_object($tecnologia)) {
+                                        $tecnologiaNombre = $tecnologia->nombre ?? null;
+                                        $descripcion = $tecnologia->descripcion ?? '';
+                                    } elseif (is_array($tecnologia)) {
+                                        $tecnologiaNombre = $tecnologia['nombre'] ?? $tecnologia[0] ?? null;
+                                        $descripcion = $tecnologia['descripcion'] ?? '';
+                                    } else {
+                                        $tecnologiaNombre = $tecnologia;
+                                        $descripcion = '';
+                                    }
+                                    
+                                    // Si no pudimos obtener la tecnología, continuar con el siguiente
+                                    if (!$tecnologiaNombre) continue;
+                                    
+                                    $tecnologiaKey = str_replace(['/', ' ', '-', '.'], '_', strtolower($tecnologiaNombre));
+                                ?>
                                     <div class="skill-item">
-                                        <div class="skill-name">
+                                        <div class="skill-name" <?php if (!empty($descripcion)): ?>title="<?php echo htmlspecialchars($descripcion); ?>"<?php endif; ?>>
                                             <input type="checkbox" id="req_<?php echo $tecnologiaKey; ?>" name="req_<?php echo $tecnologiaKey; ?>">
-                                            <label for="req_<?php echo $tecnologiaKey; ?>"><?php echo htmlspecialchars($tecnologia); ?></label>
+                                            <label for="req_<?php echo $tecnologiaKey; ?>"><?php echo htmlspecialchars($tecnologiaNombre); ?></label>
+                                            <?php if (!empty($descripcion)): ?>
+                                                <span class="info-icon">ℹ</span>
+                                            <?php endif; ?>
                                         </div>
                                         
                                         <div class="skill-level">
                                             <label>
-                                                <input type="radio" name="nivel_<?php echo $tecnologiaKey; ?>" value="malo" checked> 
+                                                <input type="radio" name="nivel_<?php echo $tecnologiaKey; ?>" value="principiante" checked> 
                                                 Básico
                                             </label>
                                             <label>
-                                                <input type="radio" name="nivel_<?php echo $tecnologiaKey; ?>" value="regular"> 
+                                                <input type="radio" name="nivel_<?php echo $tecnologiaKey; ?>" value="intermedio"> 
                                                 Intermedio
                                             </label>
                                             <label>
-                                                <input type="radio" name="nivel_<?php echo $tecnologiaKey; ?>" value="bueno"> 
+                                                <input type="radio" name="nivel_<?php echo $tecnologiaKey; ?>" value="avanzado"> 
                                                 Avanzado
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="nivel_<?php echo $tecnologiaKey; ?>" value="experto"> 
+                                                Experto
                                             </label>
                                         </div>
                                     </div>
@@ -355,10 +502,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             });
         });
-    </script>
-</body>
-</html>
-           
     </script>
 </body>
 </html>
