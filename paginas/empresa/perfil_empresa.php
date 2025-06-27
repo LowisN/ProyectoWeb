@@ -69,7 +69,7 @@ $empresa = $empresaData[0];
             
             <ul class="nav-menu">
                 <li><a href="home_empresa.php">Inicio</a></li>
-                <li><a href="nueva_vacante.php" ">Publicar Vacante</a></li>
+                <li><a href="nueva_vacante.php">Publicar Vacante</a></li>
                 <li><a href="mis_vacantes.php">Mis Vacantes</a></li>
                 <li><a href="candidatos.php">Candidatos</a></li>
                 <li><a href="#"class="active">Perfil de Empresa</a></li>
@@ -82,7 +82,6 @@ $empresa = $empresaData[0];
         
         <div class="content">
             <div class="contenedor_perfil">
-
 
    <div class="logo">
             <img src="../../imagenes/logo.png" alt="Logo">
