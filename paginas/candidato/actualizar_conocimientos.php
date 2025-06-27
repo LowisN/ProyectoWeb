@@ -27,74 +27,37 @@ if (empty($candidatoData) || isset($candidatoData['error'])) {
 
 $candidato = $candidatoData[0];
 
-// Obtener conocimientos de tecnologías de red
-$habilidades = [
-    'protocolos_red' => [
-        'TCP/IP',
-        'UDP',
-        'HTTP/HTTPS',
-        'DNS',
-        'DHCP',
-        'FTP',
-        'SMTP',
-        'POP3/IMAP',
-        'SSH',
-        'RDP'
-    ],
-    'dispositivos_red' => [
-        'Routers',
-        'Switches',
-        'Firewalls',
-        'Access Points',
-        'Load Balancers',
-        'Modems',
-        'Repeaters',
-        'VPN Concentrators',
-        'Network Bridges',
-        'Gateways'
-    ],
-    'seguridad_redes' => [
-        'VPN',
-        'Encrypting',
-        'Firewalls Hardware',
-        'Firewalls Software',
-        'IDS/IPS',
-        'Network Monitoring',
-        'Penetration Testing',
-        'SSL/TLS',
-        'Authentication Systems',
-        'Network Security Policies'
-    ],
-    'software' => [
-        'Cisco IOS',
-        'Wireshark',
-        'Nmap',
-        'PuTTY',
-        'GNS3',
-        'SolarWinds',
-        'Nagios',
-        'OpenVPN',
-        'VMware',
-        'Packet Tracer'
-    ],
-    'certificaciones' => [
-        'CCNA',
-        'CCNP',
-        'CompTIA Network+',
-        'CompTIA Security+',
-        'CISSP',
-        'CISM',
-        'JNCIA',
-        'AWS Certified Networking',
-        'Microsoft Certified: Azure Network Engineer',
-        'Fortinet NSE'
-    ]
-];
+// Obtener todas las habilidades disponibles en la base de datos
+$todasHabilidades = supabaseFetch('habilidades', '*');
+if (isset($todasHabilidades['error'])) {
+    $errorMessage = "Error al cargar las habilidades disponibles.";
+    $todasHabilidades = [];
+}
+
+// Organizar las habilidades por categorías
+$habilidadesPorCategoria = [];
+foreach ($todasHabilidades as $habilidad) {
+    if (!isset($habilidadesPorCategoria[$habilidad['categoria']])) {
+        $habilidadesPorCategoria[$habilidad['categoria']] = [];
+    }
+    $habilidadesPorCategoria[$habilidad['categoria']][] = $habilidad;
+}
 
 // Obtener los conocimientos actuales del candidato
-$conocimientos = supabaseFetch('conocimientos_candidato', '*', ['candidato_id' => $candidato['id']]);
+$habilidadesCandidato = supabaseFetch('candidato_habilidades', '*', ['candidato_id' => $candidato['id']]);
+if (isset($habilidadesCandidato['error'])) {
+    $errorMessage = "Error al cargar tus habilidades actuales.";
+    $habilidadesCandidato = [];
+}
 
-// Crear un array asociativo para facilitar el acceso
+// Crear un array asociativo para facilitar el acceso a los niveles actuales del candidato
+$nivelesActuales = [];
+foreach ($habilidadesCandidato as $habilidad) {
+    $nivelesActuales[$habilidad['habilidad_id']] = [
+        'nivel' => $habilidad['nivel'],
+        'anios_experiencia' => $habilidad['anios_experiencia']
+    ];
+}
 
 // Procesar el formulario si se ha enviado
 $successMessage = '';
@@ -104,64 +67,76 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tecnologiasGuardadas = 0;
     $errores = 0;
     
-    // Recorrer cada categoría y sus tecnologías
-    foreach ($habilidades as $categoria => $tecnologias) {
-        foreach ($tecnologias as $tecnologia) {
-            $tecnologiaKey = str_replace(['/', ' ', '-'], '_', strtolower($tecnologia));
+    // Recorrer cada habilidad enviada en el formulario
+    foreach ($_POST as $key => $value) {
+        // Si es un campo de nivel (formato: nivel_ID)
+        if (strpos($key, 'nivel_') === 0) {
+            $habilidadId = substr($key, 6); // Extraer el ID de la habilidad
+            $nivel = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
             
-            // Si la tecnología fue evaluada por el usuario
-            if (isset($_POST[$tecnologiaKey])) {
-                $nivel = filter_input(INPUT_POST, $tecnologiaKey, FILTER_SANITIZE_STRING);
-                
-                // Validar nivel
-                if (!in_array($nivel, ['malo', 'regular', 'bueno'])) {
-                    continue;
-                }
-                
-                // Preparar datos para insertar/actualizar
-                $conocimientoData = [
+            // Validar nivel
+            if (!in_array($nivel, ['principiante', 'intermedio', 'avanzado', 'experto'])) {
+                continue;
+            }
+            
+            // Obtener años de experiencia
+            $aniosExperiencia = filter_input(INPUT_POST, 'anios_' . $habilidadId, FILTER_VALIDATE_INT);
+            $aniosExperiencia = $aniosExperiencia !== false ? $aniosExperiencia : 0;
+            
+            // Preparar datos para insertar/actualizar
+            $habilidadData = [
+                'candidato_id' => $candidato['id'],
+                'habilidad_id' => $habilidadId,
+                'nivel' => $nivel,
+                'anios_experiencia' => $aniosExperiencia
+            ];
+            
+            // Verificar si ya existe esta habilidad para el candidato
+            $habilidadExistente = isset($nivelesActuales[$habilidadId]);
+            
+            if ($habilidadExistente) {
+                // Actualizar
+                $updateResponse = supabaseUpdate('candidato_habilidades', [
+                    'nivel' => $nivel,
+                    'anios_experiencia' => $aniosExperiencia,
+                    'ultima_actualizacion' => 'now()'
+                ], [
                     'candidato_id' => $candidato['id'],
-                    'tecnologia' => $tecnologia,
-                    'nivel' => $nivel
-                ];
+                    'habilidad_id' => $habilidadId
+                ]);
                 
-                // Verificar si ya existe este conocimiento
-                $conocimientoExistente = isset($conocimientosCandidato[$tecnologia]);
-                
-                if ($conocimientoExistente) {
-                    // Actualizar
-                    $updateResponse = supabaseUpdate('conocimientos_candidato', ['nivel' => $nivel], [
-                        'candidato_id' => $candidato['id'],
-                        'tecnologia' => $tecnologia
-                    ]);
-                    
-                    if (isset($updateResponse['error'])) {
-                        $errores++;
-                    } else {
-                        $tecnologiasGuardadas++;
-                        $conocimientosCandidato[$tecnologia] = $nivel;
-                    }
+                if (isset($updateResponse['error'])) {
+                    $errores++;
                 } else {
-                    // Insertar
-                    $insertResponse = supabaseInsert('conocimientos_candidato', $conocimientoData);
-                    
-                    if (isset($insertResponse['error'])) {
-                        $errores++;
-                    } else {
-                        $tecnologiasGuardadas++;
-                        $conocimientosCandidato[$tecnologia] = $nivel;
-                    }
+                    $tecnologiasGuardadas++;
+                    $nivelesActuales[$habilidadId] = [
+                        'nivel' => $nivel,
+                        'anios_experiencia' => $aniosExperiencia
+                    ];
+                }
+            } else {
+                // Insertar
+                $insertResponse = supabaseInsert('candidato_habilidades', $habilidadData);
+                
+                if (isset($insertResponse['error'])) {
+                    $errores++;
+                } else {
+                    $tecnologiasGuardadas++;
+                    $nivelesActuales[$habilidadId] = [
+                        'nivel' => $nivel,
+                        'anios_experiencia' => $aniosExperiencia
+                    ];
                 }
             }
         }
     }
     
     if ($errores > 0) {
-        $errorMessage = "Se produjeron errores al guardar algunos conocimientos.";
+        $errorMessage = "Se produjeron errores al guardar algunas habilidades.";
     }
     
     if ($tecnologiasGuardadas > 0) {
-        $successMessage = "Conocimientos actualizados correctamente.";
+        $successMessage = "Habilidades actualizadas correctamente.";
     }
 }
 ?>
@@ -201,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="section">
             <h2>Mis Conocimientos y Habilidades</h2>
             
-            <p>Evalúa tus conocimientos y habilidades en tecnologías de redes. Esto nos ayudará a encontrar las mejores vacantes para tu perfil.</p>
+            <p>Evalúa tus conocimientos y habilidades. Esto nos ayudará a encontrar las mejores vacantes para tu perfil.</p>
             
             <?php if (!empty($successMessage)): ?>
                 <div class="success-message"><?php echo htmlspecialchars($successMessage); ?></div>
@@ -212,28 +187,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
             
             <form action="" method="POST">
-                <?php foreach ($habilidades as $categoria => $tecnologias): ?>
+                <?php foreach ($habilidadesPorCategoria as $categoria => $habilidades): ?>
                     <div class="section skills-category">
                         <h3><?php echo ucfirst(str_replace('_', ' ', $categoria)); ?></h3>
                         
                         <div class="skills-grid">
-                            <?php foreach ($tecnologias as $tecnologia): ?>
-                                <?php $tecnologiaKey = str_replace(['/', ' ', '-'], '_', strtolower($tecnologia)); ?>
+                            <?php foreach ($habilidades as $habilidad): ?>
                                 <div class="skill-item">
-                                    <div class="skill-name"><?php echo htmlspecialchars($tecnologia); ?></div>
+                                    <div class="skill-name">
+                                        <?php echo htmlspecialchars($habilidad['nombre']); ?>
+                                        <?php if (!empty($habilidad['descripcion'])): ?>
+                                            <span class="skill-tooltip" title="<?php echo htmlspecialchars($habilidad['descripcion']); ?>">ℹ️</span>
+                                        <?php endif; ?>
+                                    </div>
                                     <div class="skill-level">
                                         <label>
-                                            <input type="radio" name="<?php echo $tecnologiaKey; ?>" value="malo" <?php echo (isset($conocimientosCandidato[$tecnologia]) && $conocimientosCandidato[$tecnologia] === 'malo') ? 'checked' : ''; ?>> 
-                                            Malo
+                                            <input type="radio" name="nivel_<?php echo $habilidad['id']; ?>" value="principiante" 
+                                                <?php echo (isset($nivelesActuales[$habilidad['id']]) && $nivelesActuales[$habilidad['id']]['nivel'] === 'principiante') ? 'checked' : ''; ?>> 
+                                            Principiante
                                         </label>
                                         <label>
-                                            <input type="radio" name="<?php echo $tecnologiaKey; ?>" value="regular" <?php echo (isset($conocimientosCandidato[$tecnologia]) && $conocimientosCandidato[$tecnologia] === 'regular') ? 'checked' : ''; ?>> 
-                                            Regular
+                                            <input type="radio" name="nivel_<?php echo $habilidad['id']; ?>" value="intermedio" 
+                                                <?php echo (isset($nivelesActuales[$habilidad['id']]) && $nivelesActuales[$habilidad['id']]['nivel'] === 'intermedio') ? 'checked' : ''; ?>> 
+                                            Intermedio
                                         </label>
                                         <label>
-                                            <input type="radio" name="<?php echo $tecnologiaKey; ?>" value="bueno" <?php echo (isset($conocimientosCandidato[$tecnologia]) && $conocimientosCandidato[$tecnologia] === 'bueno') ? 'checked' : ''; ?>> 
-                                            Bueno
+                                            <input type="radio" name="nivel_<?php echo $habilidad['id']; ?>" value="avanzado" 
+                                                <?php echo (isset($nivelesActuales[$habilidad['id']]) && $nivelesActuales[$habilidad['id']]['nivel'] === 'avanzado') ? 'checked' : ''; ?>> 
+                                            Avanzado
                                         </label>
+                                        <label>
+                                            <input type="radio" name="nivel_<?php echo $habilidad['id']; ?>" value="experto" 
+                                                <?php echo (isset($nivelesActuales[$habilidad['id']]) && $nivelesActuales[$habilidad['id']]['nivel'] === 'experto') ? 'checked' : ''; ?>> 
+                                            Experto
+                                        </label>
+                                    </div>
+                                    <div class="years-experience">
+                                        <label for="anios_<?php echo $habilidad['id']; ?>">Años de experiencia:</label>
+                                        <input type="number" name="anios_<?php echo $habilidad['id']; ?>" id="anios_<?php echo $habilidad['id']; ?>" 
+                                            min="0" max="30" 
+                                            value="<?php echo isset($nivelesActuales[$habilidad['id']]) ? $nivelesActuales[$habilidad['id']]['anios_experiencia'] : 0; ?>">
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -265,6 +258,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
+                });
+            });
+
+            // Tooltip para descripciones de habilidades
+            var tooltips = document.querySelectorAll('.skill-tooltip');
+            tooltips.forEach(function(tooltip) {
+                tooltip.addEventListener('mouseenter', function() {
+                    var title = this.getAttribute('title');
+                    this.setAttribute('data-title', title);
+                    this.removeAttribute('title');
+                    
+                    var tooltipDiv = document.createElement('div');
+                    tooltipDiv.className = 'tooltip-box';
+                    tooltipDiv.innerHTML = title;
+                    document.body.appendChild(tooltipDiv);
+                    
+                    var rect = this.getBoundingClientRect();
+                    tooltipDiv.style.left = rect.left + window.scrollX + 'px';
+                    tooltipDiv.style.top = rect.bottom + window.scrollY + 5 + 'px';
+                });
+                
+                tooltip.addEventListener('mouseleave', function() {
+                    var title = this.getAttribute('data-title');
+                    this.setAttribute('title', title);
+                    this.removeAttribute('data-title');
+                    
+                    var tooltipDiv = document.querySelector('.tooltip-box');
+                    if (tooltipDiv) {
+                        tooltipDiv.parentNode.removeChild(tooltipDiv);
+                    }
                 });
             });
         });
