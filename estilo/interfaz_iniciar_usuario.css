@@ -10,15 +10,15 @@ body {
 .sinMar{
     margin: 0;
 }
-#canDash{
+#mdmM{
+    margin: 100px;
+}
+#canDash, #iniCand{
     display: flex;
-    position: relative;
-    flex-direction: row;
-    align-content: stretch;
     justify-content: center;
     align-items: center;
-    width: 800px;
-    margin-top: 200px;
+    width: 700px;
+    
 }
 
 .contenedor {
