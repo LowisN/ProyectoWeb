@@ -37,39 +37,51 @@ $empresa = $empresaData[0];
 ?>
 
 
+
+  
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Perfil de Empresa</title>
-  <link rel="stylesheet" href="../../estilo/perfil_empresa.css">
-  <link rel="stylesheet" href="../../estilo/interfaz_iniciar_usuario.css">
-  <link rel="stylesheet" href="../../estilo/candidatos.css">
-
+    <meta charset="UTF-8">
+    <title>Publicar Vacante - ChambaNet</title>
+    <link rel="stylesheet" href="../../estilo/interfaz_iniciar_usuario.css">
+    <link rel="stylesheet" href="../../estilo/dashboard.css">
+    <link rel="stylesheet" href="../../estilo/formularios.css">
+    <link rel="stylesheet" href="../../estilo/conocimientos.css">
+    <link rel="stylesheet" href="../../estilo/empresa_dashboard.css">
+    <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
+    <link rel="stylesheet" href="../../estilo/perfil_empresa.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
 </head>
+
 <body>
-      <div class="sidebar">
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 32px;">
-            <img src="../../imagenes/logo.png" alt="Logo de la empresa"
-                style="width: 100px; height: 100px; margin-bottom: 32px;">
+    <div class="contenedor dashboard">
+        <div class="sidebar">
+            <div class="company-info">
+                <img src="../../imagenes/logo.png" alt="Logo de la empresa">
+                <h3><?php echo isset($empresaData[0]['nombre']) ? htmlspecialchars($empresaData[0]['nombre']) : 'Empresa'; ?></h3>
+                <p><?php 
+                    echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']);
+                ?></p>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="home_empresa.php">Inicio</a></li>
+                <li><a href="nueva_vacante.php">Publicar Vacante</a></li>
+                <li><a href="mis_vacantes.php">Mis Vacantes</a></li>
+                <li><a href="candidatos.php">Candidatos</a></li>
+                <li><a href="#"class="active">Perfil de Empresa</a></li>
+            </ul>
+            
+            <div class="logout">
+                <a href="../../controllers/logout_controller.php">Cerrar Sesión</a>
+            </div>
         </div>
-        <ul class="nav-menu" style="margin-top: 16px;">
-            <li><a href="home_empresa.php">Inicio</a></li>
-            <li>
-                <a href="nueva_vacante.php" class="active"
-                    style="background: #e04a4a; color: #fff; border-radius: 4px;">Publicar Vacante</a>
-            </li>
-            <li><a href="mis_vacantes.php">Mis Vacantes</a></li>
-            <li><a href="candidatos.php">Candidatos</a></li>
-            <li><a href="perfil_empresa.php">Perfil de Empresa</a></li>
-        </ul>
-        <div style="flex: 1;"></div>
-        <div style="margin: 32px 0 0 0; text-align: center;">
-            <a href="../../controllers/logout_controller.php" style="color: #e04a4a; text-decoration: none;">Cerrar
-                Sesión</a>
-        </div>
-    </div>
-  <div class="contenedor_perfil">
+        
+        <div class="content">
+            <div class="contenedor_perfil">
 
    <div class="logo">
             <img src="../../imagenes/logo.png" alt="Logo">
@@ -145,5 +157,30 @@ $empresa = $empresaData[0];
       </div>
       
   </div>
+    </div>
+
+    <script>
+        // Script para el botón de scroll hacia arriba
+        document.addEventListener('DOMContentLoaded', function() {
+            var scrollBtn = document.getElementById('scroll-to-top');
+            
+            // Mostrar/ocultar el botón basado en la posición del scroll
+            window.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    scrollBtn.style.display = 'block';
+                } else {
+                    scrollBtn.style.display = 'none';
+                }
+            });
+            
+            // Scroll hacia arriba al hacer clic en el botón
+            scrollBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
