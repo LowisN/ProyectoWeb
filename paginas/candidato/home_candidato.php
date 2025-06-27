@@ -65,30 +65,7 @@ $vacantes = supabaseFetch('vacantes', '*');
         <div class="content" id="cntC">
             <div class="welcome-banner">
                 <h2 id="titB">¡Bienvenido, <?php echo htmlspecialchars($_SESSION['user']['user_metadata']['nombre']); ?>!</h2>
-                <p>Estas son las vacantes que coinciden con tu perfil profesional.</p>
-            </div>
-            
-            <h2>Vacantes Recomendadas</h2>
-            
-            <div class="vacantes">
-                <?php if (!empty($vacantes) && !isset($vacantes['error'])): ?>
-                    <?php foreach ($vacantes as $vacante): ?>
-                        <div class="vacante-card">
-                            <h3><?php echo htmlspecialchars($vacante['titulo']); ?></h3>
-                 
-                            <p><?php echo htmlspecialchars(substr($vacante['descripcion'], 0, 100)) . '...'; ?></p>
-                            <div class="detalles">
-                                <span>Salario: $<?php echo number_format($vacante['salario'], 2); ?></span>
-                                <span class="match"><?php echo rand(75, 95); ?>% Match</span>
-                            </div>
-                            <div style="text-align: center; margin-top: 10px;">
-                                <a href="detalle_vacante.php?id=<?php echo $vacante['id']; ?>" style="color: #d63d3d; text-decoration: none;">Ver detalles</a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>No hay vacantes disponibles en este momento.</p>
-                <?php endif; ?>
+                <p>Te deseamos mucho éxito en tu búsqueda en el ambiente laboral !</p>
             </div>
         </div>
     </div>
