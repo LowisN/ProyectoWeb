@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once '../../config/supabase.php';
 
@@ -35,6 +36,7 @@ if (empty($empresaData) || isset($empresaData['error'])) {
 
 // Obtener vacantes de la empresa
 $vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id']]);
+
 ?>
 
 <!DOCTYPE html>

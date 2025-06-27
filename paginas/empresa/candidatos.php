@@ -1,5 +1,37 @@
 <?php
-// candidatos.php - Página de gestión de candidatos
+session_start();
+require_once '../../config/supabase.php';
+
+// Verificar si el usuario está autenticado y es un reclutador
+if (!isset($_SESSION['access_token']) || !isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'reclutador') {
+    header('Location: ../interfaz_iniciar_sesion.php');
+    exit;
+}
+
+// Obtener información del usuario actual
+$userId = $_SESSION['user']['id'];
+$userProfile = supabaseFetch('perfiles', '*', ['user_id' => $userId]);
+
+if (empty($userProfile) || isset($userProfile['error'])) {
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar el perfil');
+    exit;
+}
+
+// Obtener datos del reclutador
+$reclutadorData = supabaseFetch('reclutadores', '*', ['perfil_id' => $userProfile[0]['id']]);
+
+if (empty($reclutadorData) || isset($reclutadorData['error'])) {
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos del reclutador');
+    exit;
+}
+
+// Obtener datos de la empresa
+$empresaData = supabaseFetch('empresas', '*', ['id' => $reclutadorData[0]['empresa_id']]);
+
+if (empty($empresaData) || isset($empresaData['error'])) {
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos de la empresa');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,62 +39,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidatos - Senior Developer Frontend</title>
-    
+    <title>Candidatos</title>
+    <link rel="stylesheet" href="../../estilo/interfaz_iniciar_usuario.css">
+    <link rel="stylesheet" href="../../estilo/dashboard.css">
+    <link rel="stylesheet" href="../../estilo/formularios.css">
+    <link rel="stylesheet" href="../../estilo/conocimientos.css">
+    <link rel="stylesheet" href="../../estilo/empresa_dashboard.css">
+    <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
     <link rel="stylesheet" href="../../estilo/candidatos.css">
 </head>
 
 <body>
-    <div class="sidebar">
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 32px;">
-            <img src="../../imagenes/logo.png" alt="Logo de la empresa"
-                style="width: 100px; height: 100px; margin-bottom: 32px;">
-        </div>
-        <ul class="nav-menu" style="margin-top: 16px;">
-            <li><a href="home_empresa.php">Inicio</a></li>
-            <li>
-                <a href="nueva_vacante.php" class="active"
-                    style="background: #e04a4a; color: #fff; border-radius: 4px;">Publicar Vacante</a>
-            </li>
-            <li><a href="mis_vacantes.php">Mis Vacantes</a></li>
-            <li><a href="candidatos.php">Candidatos</a></li>
-            <li><a href="perfil_empresa.php">Perfil de Empresa</a></li>
-        </ul>
-        <div style="flex: 1;"></div>
-        <div style="margin: 32px 0 0 0; text-align: center;">
-            <a href="../../controllers/logout_controller.php" style="color: #e04a4a; text-decoration: none;">Cerrar
-                Sesión</a>
-        </div>
+    <div class="contenedor dashboard">
+        <div class="sidebar">
+       <div class="company-info">
+                <img src="../../imagenes/logo.png" alt="Logo de la empresa">
+                <h3><?php echo isset($empresaData[0]['nombre']) ? htmlspecialchars($empresaData[0]['nombre']) : 'Empresa'; ?></h3>
+                <p><?php 
+                    echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']);
+                ?></p>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="home_empresa.php">Inicio</a></li>
+                <li><a href="nueva_vacante.php" ">Publicar Vacante</a></li>
+                <li><a href="mis_vacantes.php">Mis Vacantes</a></li>
+                <li><a href="#"class="active">Candidatos</a></li>
+                <li><a href="perfil_empresa.php">Perfil de Empresa</a></li>
+            </ul>
+            
+            <div class="logout">
+                <a href="../../controllers/logout_controller.php">Cerrar Sesión</a>
+            </div>
     </div>
     <div class="main-content">
-        <!-- Header con contexto -->
-        <header class="update-header">
-            <div class="job-status-bar">
-                <div class="job-title">
-                    <h1>Senior Developer - Frontend</h1>
-                    <div class="status-indicators">
-                        <span class="status-badge active">🟢 Activa</span>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-
-        <!-- Tabs de navegación -->
-        <div class="tabs-container">
-            <nav class="tabs-nav">
-                <button class="tab-btn" data-tab="info">Información</button>
-                <button class="tab-btn active" data-tab="candidates">Candidatos</button>
-                <button class="tab-btn" data-tab="history">Historial</button>
-                <button class="tab-btn" data-tab="config">Configuración</button>
-            </nav>
-        </div>
-
         <!-- Candidates Section -->
         <div class="candidates-section">
             <div class="candidates-filters">
                 <div class="filter-chips">
-                    <button class="filter-chip active">Todos (23)</button>
+                    <button class="filter-chip active" >Todos (23)</button>
                     <button class="filter-chip">Pendientes (15)</button>
                     <button class="filter-chip">Revisados (8)</button>
                 </div>
@@ -82,10 +97,7 @@
                     <div class="candidate-status">
                         <span class="status-badge pending">Pendiente</span>
                     </div>
-                    <div class="candidate-actions">
-                        <button class="btn btn-sm btn-outline">Ver perfil</button>
-                        <button class="btn btn-sm btn-primary">Contactar</button>
-                    </div>
+                    
                 </div>
 
                 <!-- Candidato 2 - María García -->
@@ -101,10 +113,7 @@
                     <div class="candidate-status">
                         <span class="status-badge pending">Pendiente</span>
                     </div>
-                    <div class="candidate-actions">
-                        <button class="btn btn-sm btn-outline">Ver perfil</button>
-                        <button class="btn btn-sm btn-primary">Contactar</button>
-                    </div>
+                   
                 </div>
 
                 <!-- Candidato 3 - Carlos López -->
@@ -120,10 +129,7 @@
                     <div class="candidate-status">
                         <span class="status-badge pending">Pendiente</span>
                     </div>
-                    <div class="candidate-actions">
-                        <button class="btn btn-sm btn-outline">Ver perfil</button>
-                        <button class="btn btn-sm btn-primary">Contactar</button>
-                    </div>
+                    
                 </div>
 
                 <!-- Candidato 4 - Ana Martínez -->
@@ -139,10 +145,7 @@
                     <div class="candidate-status">
                         <span class="status-badge pending">Pendiente</span>
                     </div>
-                    <div class="candidate-actions">
-                        <button class="btn btn-sm btn-outline">Ver perfil</button>
-                        <button class="btn btn-sm btn-primary">Contactar</button>
-                    </div>
+                    
                 </div>
 
                 <!-- Candidato 5 - Roberto Silva -->
@@ -158,16 +161,11 @@
                     <div class="candidate-status">
                         <span class="status-badge pending">Pendiente</span>
                     </div>
-                    <div class="candidate-actions">
-                        <button class="btn btn-sm btn-outline">Ver perfil</button>
-                        <button class="btn btn-sm btn-primary">Contactar</button>
-                    </div>
+                    
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Action Buttons -->
+<!-- Action Buttons -->
     <div class="action-buttons">
         <button type="button" class="btn btn-outline">
             <i class="fas fa-times"></i> Cancelar
@@ -179,6 +177,15 @@
             <i class="fas fa-check"></i> Aplicar Cambios
         </button>
     </div>
+</div>
+
+
+
+
+
+    </div>
+
+    
 
     <script>
         // Tab switching functionality
