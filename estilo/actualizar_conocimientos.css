@@ -1,0 +1,175 @@
+/* General */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to top right, #ff0400, #f08d8d, #ffffff);
+  overflow-y: auto;
+}
+
+/* Contenedor principal que usa flex para layout */
+.contenedor.dashboard {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Barra lateral izquierda */
+.sidebar {
+  width: 250px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .user-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar .user-info img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.sidebar .user-info h3 {
+  font-size: 16px;
+  color: #333;
+}
+
+.sidebar .nav-menu {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.sidebar .nav-menu li {
+  margin-bottom: 10px;
+}
+
+.sidebar .nav-menu a {
+  text-decoration: none;
+  color: #333;
+  padding: 8px 12px;
+  display: block;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.sidebar .nav-menu a.active,
+.sidebar .nav-menu a:hover {
+  background-color: #e1322f;
+  color: #fff;
+}
+
+/* Botón cerrar sesión */
+.sidebar .logout a {
+  display: block;
+  margin-top: 40px;
+  color: #e1322f;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Área de contenido */
+.content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.content h2 {
+  color: #e1322f;
+  margin-bottom: 10px;
+}
+
+.success-message,
+.error-message {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Categoría de habilidades */
+.skills-category {
+  margin-bottom: 30px;
+}
+
+.skills-category h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Grid de habilidades */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+/* Item individual de habilidad */
+.skill-item {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.skill-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.skill-rating {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.skill-rating label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.skill-rating input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* Botón guardar */
+button[type="submit"] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #e1322f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #b52b25;
+}
