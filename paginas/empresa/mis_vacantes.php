@@ -84,6 +84,15 @@ if (empty($habilidades)) {
     ];
 }
 
+// Función de utilidad para obtener un valor de un array de forma segura
+function getValue($array, $key, $default = '') {
+    if (!is_array($array)) {
+        error_log("getValue: el primer parámetro no es un array, es " . gettype($array));
+        return $default;
+    }
+    return isset($array[$key]) ? $array[$key] : $default;
+}
+
 // Variables para mensajes y datos
 $successMessage = '';
 $errorMessage = '';
@@ -112,9 +121,16 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     if ($editingVacante) {
         // Obtener requisitos de la vacante
         $requisitosVacante = supabaseFetch('requisitos_vacante', '*', ['vacante_id' => $vacanteId]);
-        if (isset($requisitosVacante['error'])) {
+        
+        // Asegurarse de que $requisitosVacante sea un array válido
+        if (!is_array($requisitosVacante) || isset($requisitosVacante['error'])) {
+            error_log("Error al obtener requisitos para la vacante $vacanteId: " . 
+                     (is_array($requisitosVacante) && isset($requisitosVacante['error']) ? json_encode($requisitosVacante['error']) : "No es un array"));
             $requisitosVacante = [];
         }
+        
+        // Registrar para diagnóstico
+        error_log("Requisitos obtenidos para vacante $vacanteId: " . count($requisitosVacante));
     }
 }
 
@@ -148,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_vacante'])) {
                 'salario' => $salario,
                 'modalidad' => $modalidad,
                 'ubicacion' => $ubicacion,
-                'anios_experiencia_requeridos' => $anios_experiencia,
+                'anios_experiencia' => $anios_experiencia,
                 'estado' => $estado
             ];
 
@@ -484,43 +500,43 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
 
             <?php if ($editingVacante): ?>
                 <div class="edit-form">
-                    <h3>Editar Vacante: <?php echo htmlspecialchars($editingVacante['titulo']); ?></h3>
+                    <h3>Editar Vacante: <?php echo htmlspecialchars(getValue($editingVacante, 'titulo', 'Sin título')); ?></h3>
 
                     <form action="" method="POST">
-                        <input type="hidden" name="vacante_id" value="<?php echo $editingVacante['id']; ?>">
+                        <input type="hidden" name="vacante_id" value="<?php echo getValue($editingVacante, 'id', 0); ?>">
 
                         <div class="section">
                             <h4>Información de la Vacante</h4>
 
                             <div class="form-group">
                                 <label for="titulo">Título de la vacante*</label>
-                                <input type="text" id="titulo" name="titulo" value="<?php echo htmlspecialchars($editingVacante['titulo']); ?>" required>
+                                <input type="text" id="titulo" name="titulo" value="<?php echo htmlspecialchars(getValue($editingVacante, 'titulo', '')); ?>" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="descripcion">Descripción general de la vacante*</label>
-                                <textarea id="descripcion" name="descripcion" required><?php echo htmlspecialchars($editingVacante['descripcion']); ?></textarea>
+                                <textarea id="descripcion" name="descripcion" required><?php echo htmlspecialchars(getValue($editingVacante, 'descripcion', '')); ?></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="responsabilidades">Responsabilidades*</label>
-                                <textarea id="responsabilidades" name="responsabilidades" required><?php echo htmlspecialchars($editingVacante['responsabilidades']); ?></textarea>
+                                <textarea id="responsabilidades" name="responsabilidades" required><?php echo htmlspecialchars(getValue($editingVacante, 'responsabilidades', '')); ?></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="requisitos">Requisitos generales*</label>
-                                <textarea id="requisitos" name="requisitos" required><?php echo htmlspecialchars($editingVacante['requisitos']); ?></textarea>
+                                <textarea id="requisitos" name="requisitos" required><?php echo htmlspecialchars(getValue($editingVacante, 'requisitos', '')); ?></textarea>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="salario">Salario mensual (MXN)*</label>
-                                    <input type="number" id="salario" name="salario" min="0" step="1000" value="<?php echo $editingVacante['salario']; ?>" required>
+                                    <input type="number" id="salario" name="salario" min="0" step="1000" value="<?php echo getValue($editingVacante, 'salario', 0); ?>" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="anios_experiencia">Años de experiencia requeridos*</label>
-                                    <input type="number" id="anios_experiencia" name="anios_experiencia" min="0" value="<?php echo $editingVacante['anios_experiencia_requeridos']; ?>" required>
+                                    <input type="number" id="anios_experiencia" name="anios_experiencia" min="0" value="<?php echo getValue($editingVacante, 'anios_experiencia', 0); ?>" required>
                                 </div>
                             </div>
 
@@ -528,24 +544,26 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
                                 <div class="form-group">
                                     <label for="modalidad">Modalidad de trabajo*</label>
                                     <select id="modalidad" name="modalidad" required>
-                                        <option value="presencial" <?php echo $editingVacante['modalidad'] === 'presencial' ? 'selected' : ''; ?>>Presencial</option>
-                                        <option value="remoto" <?php echo $editingVacante['modalidad'] === 'remoto' ? 'selected' : ''; ?>>Remoto</option>
-                                        <option value="híbrido" <?php echo $editingVacante['modalidad'] === 'híbrido' ? 'selected' : ''; ?>>Híbrido</option>
+                                        <?php $modalidad = getValue($editingVacante, 'modalidad', ''); ?>
+                                        <option value="presencial" <?php echo $modalidad === 'presencial' ? 'selected' : ''; ?>>Presencial</option>
+                                        <option value="remoto" <?php echo $modalidad === 'remoto' ? 'selected' : ''; ?>>Remoto</option>
+                                        <option value="híbrido" <?php echo $modalidad === 'híbrido' ? 'selected' : ''; ?>>Híbrido</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="ubicacion">Ubicación*</label>
-                                    <input type="text" id="ubicacion" name="ubicacion" value="<?php echo htmlspecialchars($editingVacante['ubicacion']); ?>" required>
+                                    <input type="text" id="ubicacion" name="ubicacion" value="<?php echo htmlspecialchars(getValue($editingVacante, 'ubicacion', '')); ?>" required>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="estado">Estado de la vacante*</label>
                                 <select id="estado" name="estado" required>
-                                    <option value="activa" <?php echo $editingVacante['estado'] === 'activa' ? 'selected' : ''; ?>>Activa</option>
-                                    <option value="pausada" <?php echo $editingVacante['estado'] === 'pausada' ? 'selected' : ''; ?>>Pausada</option>
-                                    <option value="cerrada" <?php echo $editingVacante['estado'] === 'cerrada' ? 'selected' : ''; ?>>Cerrada</option>
+                                    <?php $estado = getValue($editingVacante, 'estado', 'activa'); ?>
+                                    <option value="activa" <?php echo $estado === 'activa' ? 'selected' : ''; ?>>Activa</option>
+                                    <option value="pausada" <?php echo $estado === 'pausada' ? 'selected' : ''; ?>>Pausada</option>
+                                    <option value="cerrada" <?php echo $estado === 'cerrada' ? 'selected' : ''; ?>>Cerrada</option>
                                 </select>
                             </div>
                         </div>
@@ -557,10 +575,20 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
                             <?php 
                             // Crear array de requisitos actuales para fácil acceso
                             $requisitosActuales = [];
-                            foreach ($requisitosVacante as $req) {
-                                $key = str_replace(['/', ' ', '-', '.'], '_', strtolower($req['tecnologia']));
-                                $requisitosActuales[$key] = $req['nivel_requerido'];
+                            
+                            // Verificar que $requisitosVacante sea un array
+                            if (is_array($requisitosVacante)) {
+                                foreach ($requisitosVacante as $req) {
+                                    // Verificar que $req sea un array y tenga los índices esperados
+                                    if (is_array($req) && isset($req['tecnologia']) && isset($req['nivel_requerido'])) {
+                                        $key = str_replace(['/', ' ', '-', '.'], '_', strtolower($req['tecnologia']));
+                                        $requisitosActuales[$key] = $req['nivel_requerido'];
+                                    }
+                                }
                             }
+                            
+                            // Registrar para diagnóstico
+                            error_log("Requisitos procesados para vacante {$editingVacante['id']}: " . count($requisitosActuales));
 
                             ksort($habilidades);
 
@@ -600,9 +628,6 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
                                                 <div class="skill-name" <?php if (!empty($descripcion)): ?>title="<?php echo htmlspecialchars($descripcion); ?>"<?php endif; ?>>
                                                     <input type="checkbox" id="req_<?php echo $tecnologiaKey; ?>" name="req_<?php echo $tecnologiaKey; ?>" <?php echo $isRequired ? 'checked' : ''; ?>>
                                                     <label for="req_<?php echo $tecnologiaKey; ?>"><?php echo htmlspecialchars($tecnologiaNombre); ?></label>
-                                                    <?php if (!empty($descripcion)): ?>
-                                                        <span class="info-icon">ℹ</span>
-                                                    <?php endif; ?>
                                                 </div>
 
                                                 <div class="skill-level">
@@ -647,38 +672,38 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
                     <?php foreach ($vacantesEmpresa as $vacante): ?>
                         <div class="vacante-card">
                             <div class="vacante-header">
-                                <h3 class="vacante-title"><?php echo htmlspecialchars($vacante['titulo']); ?></h3>
-                                <span class="vacante-status status-<?php echo $vacante['estado']; ?>">
-                                    <?php echo ucfirst($vacante['estado']); ?>
+                                <h3 class="vacante-title"><?php echo htmlspecialchars(getValue($vacante, 'titulo', 'Sin título')); ?></h3>
+                                <span class="vacante-status status-<?php echo getValue($vacante, 'estado', 'activa'); ?>">
+                                    <?php echo ucfirst(getValue($vacante, 'estado', 'activa')); ?>
                                 </span>
                             </div>
 
                             <div class="vacante-info">
                                 <div class="info-item">
                                     <span class="info-label">Salario:</span>
-                                    <span class="info-value">$<?php echo number_format($vacante['salario'], 0, '.', ','); ?> MXN</span>
+                                    <span class="info-value">$<?php echo number_format(getValue($vacante, 'salario', 0), 0, '.', ','); ?> MXN</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="info-label">Modalidad:</span>
-                                    <span class="info-value"><?php echo ucfirst($vacante['modalidad']); ?></span>
+                                    <span class="info-value"><?php echo ucfirst(getValue($vacante, 'modalidad', 'No especificada')); ?></span>
                                 </div>
                                 <div class="info-item">
                                     <span class="info-label">Ubicación:</span>
-                                    <span class="info-value"><?php echo htmlspecialchars($vacante['ubicacion']); ?></span>
+                                    <span class="info-value"><?php echo htmlspecialchars(getValue($vacante, 'ubicacion', 'No especificada')); ?></span>
                                 </div>
                                 <div class="info-item">
                                     <span class="info-label">Experiencia:</span>
-                                    <span class="info-value"><?php echo $vacante['anios_experiencia_requeridos']; ?> años</span>
+                                    <span class="info-value"><?php echo getValue($vacante, 'anios_experiencia', 'No especificada'); ?> años</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="info-label">Fecha de publicación:</span>
-                                    <span class="info-value"><?php echo date('d/m/Y', strtotime($vacante['fecha_publicacion'])); ?></span>
+                                    <span class="info-value"><?php echo getValue($vacante, 'fecha_publicacion') ? date('d/m/Y', strtotime($vacante['fecha_publicacion'])) : 'No especificada'; ?></span>
                                 </div>
                             </div>
 
                             <div class="vacante-actions">
-                                <a href="?edit=<?php echo $vacante['id']; ?>" class="btn btn-edit">Editar</a>
-                                <a href="?delete=<?php echo $vacante['id']; ?>" class="btn btn-delete" 
+                                <a href="?edit=<?php echo getValue($vacante, 'id', 0); ?>" class="btn btn-edit">Editar</a>
+                                <a href="?delete=<?php echo getValue($vacante, 'id', 0); ?>" class="btn btn-delete" 
                                    onclick="return confirm('¿Estás seguro de que deseas eliminar esta vacante?')">Eliminar</a>
                             </div>
                         </div>
