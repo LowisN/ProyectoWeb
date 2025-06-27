@@ -1,5 +1,5 @@
 <?php
-/*
+
 session_start();
 require_once '../../config/supabase.php';
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $candidato = array_merge($candidato, $updateData);
         }
     }
-}*/
+}
 ?>
 
 <!DOCTYPE html>
@@ -83,8 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="contenedor dashboard" id="canDash">
         <div class="sidebar">
             <div class="user-info">
-                <?php $_SESSION['user']['user_metadata']['nombre'] = '0'?>
-                <?php $_SESSION['user']['user_metadata']['apellidos'] = '0'?>
                 <img src="../../imagenes/logo.png" alt="Foto de perfil">
                 <h3><?php echo htmlspecialchars($_SESSION['user']['user_metadata']['nombre'] . ' ' . $_SESSION['user']['user_metadata']['apellidos']); ?></h3>
             </div>
