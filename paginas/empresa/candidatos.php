@@ -80,17 +80,6 @@ if (empty($empresaData) || isset($empresaData['error'])) {
             </div>
         </header>
 
-
-        <!-- Tabs de navegación -->
-        <div class="tabs-container">
-            <nav class="tabs-nav">
-                <button class="tab-btn" data-tab="info">Información</button>
-                <button class="tab-btn active" data-tab="candidates">Candidatos</button>
-                <button class="tab-btn" data-tab="history">Historial</button>
-                <button class="tab-btn" data-tab="config">Configuración</button>
-            </nav>
-        </div>
-
         <!-- Candidates Section -->
         <div class="candidates-section">
             <div class="candidates-filters">
