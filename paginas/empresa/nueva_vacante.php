@@ -396,9 +396,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <div class="skill-name" <?php if (!empty($descripcion)): ?>title="<?php echo htmlspecialchars($descripcion); ?>"<?php endif; ?>>
                                             <input type="checkbox" id="req_<?php echo $tecnologiaKey; ?>" name="req_<?php echo $tecnologiaKey; ?>">
                                             <label for="req_<?php echo $tecnologiaKey; ?>"><?php echo htmlspecialchars($tecnologiaNombre); ?></label>
-                                            <?php if (!empty($descripcion)): ?>
-                                                <span class="info-icon">ℹ</span>
-                                            <?php endif; ?>
                                         </div>
                                         
                                         <div class="skill-level">
