@@ -90,7 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <ul class="nav-menu">
                 <li><a href="home_candidato.php">Inicio</a></li>
                 <li><a href="#" class="active">Mi Perfil</a></li>
-                <li><a href="mis_postulaciones.php">Mis Postulaciones</a></li>
                 <li><a href="actualizar_conocimientos.php">Mis Conocimientos</a></li>
             </ul>
             
