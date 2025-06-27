@@ -456,7 +456,7 @@ if (isset($_GET['error']) && !empty($_GET['error'])) {
             
             <div class="form-buttons">
                 <a href="mis_vacantes.php" class="btn btn-secondary">Volver a Mis Vacantes</a>
-                <a href="candidaturas.php?vacante_id=<?php echo $vacanteData['id']; ?>" class="btn btn-primary">Ver Candidaturas</a>
+                <a href="candidatos.php?vacante_id=<?php echo $vacanteData['id']; ?>" class="btn btn-primary">Ver Candidaturas</a>
             </div>
         </div>
     </div>

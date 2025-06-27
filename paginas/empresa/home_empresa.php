@@ -108,7 +108,7 @@ $vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id'
                                 <span>Candidatos: <?php echo $vacante['candidatos_count'] ?? 0; ?></span>
                             </div>
                             <div class="acciones">
-                                <a href="ver_candidatos.php?vacante_id=<?php echo $vacante['id']; ?>">Ver Candidatos</a>
+                                <a href="candidatos.php?vacante_id=<?php echo $vacante['id']; ?>">Ver Candidatos</a>
                                 <a href="editar_vacante.php?id=<?php echo $vacante['id']; ?>">Editar</a>
                             </div>
                         </div>
