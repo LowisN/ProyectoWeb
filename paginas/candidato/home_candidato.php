@@ -44,7 +44,7 @@ $vacantes = supabaseFetch('vacantes', '*');
 </head>
 
 <body class="sinMar">
-    <div class="contenedor dashboard">
+    <div class="contenedor dashboard" id="iniCand">
         <div class="sidebar">
             <div class="user-info">
                 <img src="../../imagenes/logo.png" alt="Foto de perfil">

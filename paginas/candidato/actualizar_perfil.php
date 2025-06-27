@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 
-<body id="masM">
+<body >
     <div class="contenedor dashboard" id="canDash">
         <div class="sidebar">
             <div class="user-info">

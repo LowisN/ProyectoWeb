@@ -171,13 +171,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Mis Conocimientos - ChambaNet</title>
-    <link rel="stylesheet" href="../../estilo/interfaz_iniciar_usuario.css">
+   <link rel="stylesheet" href="../../estilo/interfaz_iniciar_usuario.css">
     <link rel="stylesheet" href="../../estilo/dashboard.css">
+    <link rel="stylesheet" href="../../estilo/formularios.css">
     <link rel="stylesheet" href="../../estilo/conocimientos.css">
-    <link rel="stylesheet" href="../../estilo/candidato_dashboard.css">
+    <link rel="stylesheet" href="../../estilo/empresa_dashboard.css">
+    <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
 </head>
 
-<body class="dashboard">
+<body >
     <div class="contenedor dashboard">
         <div class="sidebar">
             <div class="user-info">
@@ -197,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
         
-        <div class="content">
+        <div class="section">
             <h2>Mis Conocimientos y Habilidades</h2>
             
             <p>Evalúa tus conocimientos y habilidades en tecnologías de redes. Esto nos ayudará a encontrar las mejores vacantes para tu perfil.</p>
@@ -220,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php $tecnologiaKey = str_replace(['/', ' ', '-'], '_', strtolower($tecnologia)); ?>
                                 <div class="skill-item">
                                     <div class="skill-name"><?php echo htmlspecialchars($tecnologia); ?></div>
-                                    <div class="skill-rating">
+                                    <div class="skill-level">
                                         <label>
                                             <input type="radio" name="<?php echo $tecnologiaKey; ?>" value="malo" <?php echo (isset($conocimientosCandidato[$tecnologia]) && $conocimientosCandidato[$tecnologia] === 'malo') ? 'checked' : ''; ?>> 
                                             Malo
@@ -242,7 +244,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <button type="submit">Guardar Conocimientos</button>
             </form>
+            <div id="scroll-to-top">↑</div> 
         </div>
     </div>
+    <script>
+        // Script para el botón de scroll hacia arriba
+        document.addEventListener('DOMContentLoaded', function() {
+            var scrollBtn = document.getElementById('scroll-to-top');
+            
+            // Mostrar/ocultar el botón basado en la posición del scroll
+            window.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    scrollBtn.style.display = 'block';
+                } else {
+                    scrollBtn.style.display = 'none';
+                }
+            });
+            
+            // Scroll hacia arriba al hacer clic en el botón
+            scrollBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
