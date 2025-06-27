@@ -74,8 +74,7 @@ $empresa = $empresaData[0];
    <div class="logo">
             <img src="../../imagenes/logo.png" alt="Logo">
     </div>
-  <a href="./home_empresa.php" class="enlace-izquierdo">Volver</a>
-
+  
   <div class="recuadro_titulo">
     <h1>Perfil de la Empresa</h1>
   </div>
