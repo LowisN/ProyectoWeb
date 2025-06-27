@@ -10,7 +10,7 @@ body {
   box-sizing: border-box;
 }
 
-.contenedor {
+.contenedor_perfil {
      position: relative;
     background: linear-gradient(to bottom,
             #d9d6d6 10%,
@@ -22,20 +22,35 @@ body {
     border-radius: 10px;
     padding: 30px;
     width: 600px;
+    align-items: center;
     text-align: center;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.199);
     border: none;
     margin-top: 50px;
+    max-height: 80vh; /* altura máxima: 80% de la altura de la ventana */
+  overflow-y: auto; /* scroll vertical si se excede la altura */
+  padding: 20px; /* opcional, para que no quede pegado */
+  border: 1px solid #ccc; /* opcional, para delimitar */
 
 }
 
-/* Títulos */
-.contenedor h1,
-contenedor h2 {
-text-align: center;
-color: #e1322f;
+.recuadro_titulo {
+  background-color: #ffffff;
+  padding: 15px 25px;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  text-align: center;
 }
 
+/* Para centrarlo dentro del contenedor */
+.contenedor h1.recuadro_titulo {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 20px auto; /* Centrado + espacio inferior */
+  color: #e1322f;
+}
 /* Estilo de campos */
 .campo {
   margin-bottom: 15px;
@@ -47,6 +62,24 @@ color: #e1322f;
   font-weight: bold;
   color: #000000;
   margin-bottom: 3px;
+}
+
+.enlace-izquierdo {
+  position: absolute;
+  top:20px;    /* distancia del top del contenedor */
+  left: 5px;
+  display: inline-block;
+  background-color: #e1322f;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-bottom: 15px; /* separa del contenido */
+  z-index: 10; /* para que esté visible sobre otros elementos */
+}
+.enlace-izquierdo:hover {
+  background-color: #e1322f;
 }
 
 /* Valores */
@@ -69,7 +102,20 @@ a.valor:hover {
  position: absolute;
   top: 20px;
   right: 30px;
-  width: 50px;       /* Ajusta el tamaño según tu logo */
+  width: 50px;       
   height: auto;
   z-index: 10;
+}
+
+
+
+.recuadro {
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    width: 40%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
 }

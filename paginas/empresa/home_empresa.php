@@ -33,8 +33,7 @@ if (empty($empresaData) || isset($empresaData['error'])) {
     exit;
 }
 
-// Obtener vacantes de la empresa
-$vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id']]);
+
 
 ?>
 

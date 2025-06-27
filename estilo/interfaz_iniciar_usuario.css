@@ -42,10 +42,11 @@ body {
 #titB,#ttitB {
     color:white;
 }
-h2 {
+h1, h2 {
     color: #d63d3d;
     margin-bottom: 20px;
 }
+
 
 label {
     display: block;
