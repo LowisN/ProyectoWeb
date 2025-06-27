@@ -244,7 +244,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } 
     
 
-
 ?>
 
 <!DOCTYPE html>
@@ -259,54 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../estilo/empresa_dashboard.css">
     <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .skills-category {
-            margin-bottom: 30px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 20px;
-        }
-        
-        .skills-category h4 {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-left: 4px solid #007bff;
-            margin-bottom: 15px;
-            text-transform: capitalize;
-        }
-        
-        .skill-name {
-            position: relative;
-            cursor: help;
-            display: flex;
-            align-items: center;
-        }
-        
-        .info-icon {
-            font-size: 0.8em;
-            color: #007bff;
-            margin-left: 5px;
-            vertical-align: super;
-        }
-        
-        /* Mejoras para la visualización en mobile */
-        @media (max-width: 768px) {
-            .skill-item {
-                padding: 10px 0;
-                border-bottom: 1px solid #eee;
-            }
-            
-            .skill-level {
-                display: flex;
-                flex-wrap: wrap;
-                margin-top: 5px;
-            }
-            
-            .skill-level label {
-                margin-right: 10px;
-                margin-bottom: 5px;
-            }
-        }
-    </style>
+   
 </head>
 
 <body>
@@ -316,7 +268,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img src="../../imagenes/logo.png" alt="Logo de la empresa">
                 <h3><?php echo isset($empresaData[0]['nombre']) ? htmlspecialchars($empresaData[0]['nombre']) : 'Empresa'; ?></h3>
                 <p><?php 
-                    echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']);                ?></p>
+                    echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']);
+                ?></p>
             </div>
             
             <ul class="nav-menu">
@@ -443,9 +396,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <div class="skill-name" <?php if (!empty($descripcion)): ?>title="<?php echo htmlspecialchars($descripcion); ?>"<?php endif; ?>>
                                             <input type="checkbox" id="req_<?php echo $tecnologiaKey; ?>" name="req_<?php echo $tecnologiaKey; ?>">
                                             <label for="req_<?php echo $tecnologiaKey; ?>"><?php echo htmlspecialchars($tecnologiaNombre); ?></label>
-                                            <?php if (!empty($descripcion)): ?>
-                                                <span class="info-icon">ℹ</span>
-                                            <?php endif; ?>
                                         </div>
                                         
                                         <div class="skill-level">
