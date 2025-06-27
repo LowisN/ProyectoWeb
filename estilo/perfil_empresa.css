@@ -1,9 +1,9 @@
 :root {
   --primary-red: #e1322f;
   --primary-red-dark: #b32422;
-  --gray-dark: #222;
-  --gray-medium: #666;
-  --gray-light: #ddd;
+  --gray-dark: #0a0a0a;
+  --gray-medium: #0f0f0f;
+  --gray-light: #535353;
   --background-light: #f8f9fa;
   --border-radius: 8px;
   --spacing-xs: 6px;
@@ -70,7 +70,7 @@ body {
 
 .valor {
   display: block;
-  color: var(--gray-medium);
+  color: #535353;
   font-size: 1rem;
   line-height: 1.4;
   word-wrap: break-word;
@@ -103,7 +103,7 @@ a.valor:hover {
   z-index: 10; /* para que esté visible sobre otros elementos */
 }
 .enlace-izquierdo:hover {
-  background-color: #0056b3;
+  background-color: #d80e0e;
 }
 .logo img {
   position: absolute;
