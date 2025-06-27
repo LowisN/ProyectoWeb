@@ -104,9 +104,8 @@
             <p>* Campos obligatorios</p>
             
             <button type="submit">Registrar Empresa</button>
+            <button type="button" onclick="window.location.href='elegir_registro.php'">Volver</button>
         </form>
-        
-        <a href="elegir_registro.php" class="enlaces">Volver</a>
     </div>
 </body>
 <script>
