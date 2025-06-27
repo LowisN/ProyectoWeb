@@ -67,13 +67,8 @@
 #cntC{
     margin-left: 0px;
 }
-.content{
-    color: #000000;
-    margin-bottom: 20px;
-}
-
-#titulo{
-    color: #ffffff;
+.content h2 {
+    color: #d63d3d;
     margin-bottom: 20px;
 }
 

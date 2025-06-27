@@ -57,6 +57,7 @@
     color: #d63d3d;
     margin-bottom: 20px;
     text-align: center;
+    margin-left: -6em;
 }
 
 .section {
@@ -79,7 +80,7 @@
 }
 
 textarea {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;

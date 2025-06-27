@@ -35,7 +35,6 @@ if (empty($empresaData) || isset($empresaData['error'])) {
 
 // Obtener vacantes de la empresa
 $vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id']]);
-
 ?>
 
 <!DOCTYPE html>
@@ -48,10 +47,13 @@ $vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id'
     <link rel="stylesheet" href="../../estilo/vacantes.css">
 </head>
 
-<body>
+<body class="sinMar">
     <div class="contenedor dashboard">
         <div class="sidebar">
             <div class="company-info">
+                <?php echo $empresaData[0]['nombre']= '0'; ?>
+                <?php echo $reclutadorData[0]['nombre'] = '0';?>
+                <?php echo $reclutadorData[0]['apellidos'] = '0';?>
                 <img src="../../imagenes/logo.png" alt="Logo de la empresa">
                 <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3>
                 <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p>
@@ -73,7 +75,7 @@ $vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id'
         <div class="content">
             <div class="welcome-banner">
                 <div>
-                    <h2 id="titulo">¡Bienvenido al Portal de Empresa!</h2>
+                    <h2 id="ttitB">¡Bienvenido al Portal de Empresa!</h2>
                     <p>Gestiona tus vacantes y candidatos desde aquí.</p>
                 </div>
                 <a href="nueva_vacante.php" class="btn-nueva-vacante">Nueva Vacante</a>
@@ -94,7 +96,7 @@ $vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id'
                 </div>
             </div>
             
-            <h2 class="vacantes_r">Vacantes Recientes</h2>
+            <h2>Vacantes Recientes</h2>
             
             <div class="vacantes">
                 <?php if (!empty($vacantes) && !isset($vacantes['error'])): ?>
