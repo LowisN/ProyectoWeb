@@ -94,3 +94,24 @@ button[type="submit"] {
 html, body {
     overflow-x: hidden;
 }
+
+/* Corrección específica para el iframe de nueva vacante */
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 100vh;
+    background: linear-gradient(to top right, #ff0400, #f08d8d, #ffff);
+    display: block !important; /* Sobrescribe el display: flex */
+    justify-content: unset !important; /* Elimina el centrado */
+    align-items: unset !important; /* Elimina el centrado vertical */
+}
+
+/* Asegurar que el formulario use todo el ancho */
+.formulario-vacante {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    box-sizing: border-box;
+}

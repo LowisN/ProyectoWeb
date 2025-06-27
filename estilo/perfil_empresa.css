@@ -1,0 +1,75 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 40px 0;
+  min-height: 100vh;
+  background: linear-gradient(to top right, #ff0400, #f08d8d, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.contenedor {
+     position: relative;
+    background: linear-gradient(to bottom,
+            #d9d6d6 10%,
+            /* gris claro superior */
+            #eeecec 30%,
+            /* centro blanco */
+            #ffffff 97%,
+            #e1322f 100%);
+    border-radius: 10px;
+    padding: 30px;
+    width: 600px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.199);
+    border: none;
+    margin-top: 50px;
+
+}
+
+/* Títulos */
+.contenedor h1,
+contenedor h2 {
+text-align: center;
+color: #e1322f;
+}
+
+/* Estilo de campos */
+.campo {
+  margin-bottom: 15px;
+}
+
+/* Etiquetas */
+.campo strong {
+  display: block;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 3px;
+}
+
+/* Valores */
+.valor {
+  display: block;
+  color: #313131;
+  font-size: 14px;
+}
+
+/* Enlace */
+a.valor {
+  color: #e53935;
+  text-decoration: none;
+}
+
+a.valor:hover {
+  text-decoration: underline;
+}
+.logo img {
+ position: absolute;
+  top: 20px;
+  right: 30px;
+  width: 50px;       /* Ajusta el tamaño según tu logo */
+  height: auto;
+  z-index: 10;
+}
