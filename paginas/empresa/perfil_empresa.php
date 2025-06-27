@@ -82,6 +82,30 @@ $empresa = $empresaData[0];
         
         <div class="content">
             <div class="contenedor_perfil">
+      <div class="sidebar">
+         <div class="company-info">
+                <img src="../../imagenes/logo.png" alt="Logo de la empresa">
+                <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3>
+                <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p>
+            </div>
+  
+        <ul class="nav-menu" style="margin-top: 16px;">
+            <li><a href="home_empresa.php">Inicio</a></li>
+            <li>
+                <a href="nueva_vacante.php" class="active"
+                    style="background: #e04a4a; color: #fff; border-radius: 4px;">Publicar Vacante</a>
+            </li>
+            <li><a href="mis_vacantes.php">Mis Vacantes</a></li>
+            <li><a href="candidatos.php">Candidatos</a></li>
+            <li><a href="perfil_empresa.php">Perfil de Empresa</a></li>
+        </ul>
+        <div style="flex: 1;"></div>
+        <div style="margin: 32px 0 0 0; text-align: center;">
+            <a href="../../controllers/logout_controller.php" style="color: #e04a4a; text-decoration: none;">Cerrar
+                Sesión</a>
+        </div>
+    </div>
+  <div class="contenedor_perfil">
 
    <div class="logo">
             <img src="../../imagenes/logo.png" alt="Logo">
