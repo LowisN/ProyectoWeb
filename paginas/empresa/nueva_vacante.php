@@ -197,90 +197,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../estilo/formularios.css">
     <link rel="stylesheet" href="../../estilo/conocimientos.css">
     <link rel="stylesheet" href="../../estilo/empresa_dashboard.css">
-<<<<<<< Updated upstream
-=======
-    <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <style>
-/* Forzar que el dashboard use todo el ancho */
-.contenedor.dashboard {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    height: 100vh;
-    box-sizing: border-box;
-}
-
-.dashboard {
-    display: grid !important;
-    grid-template-columns: 250px 1fr !important;
-    gap: 0 !important;
-    width: 100% !important;
-    height: 100vh;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.sidebar {
-    width: 250px !important;
-    height: 100vh;
-    margin: 0 !important;
-    padding: 20px !important;
-    box-sizing: border-box;
-}
-
-.content {
-    width: 100% !important;
-    padding: 20px !important;
-    margin: 0 !important;
-    box-sizing: border-box;
-    display: flex !important;
-    flex-direction: column !important;
-}
-
-.content h2 {
-    margin: 0 0 20px 0 !important;
-    text-align: left !important;
-}
-
-/* El iframe debe usar todo el espacio disponible */
-#nVacante {
-    width: 100% !important;
-    height: calc(100vh - 100px) !important;
-    border: none !important;
-    border-radius: 10px !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-    display: block !important;
-    margin: 0 !important;
-    background: #fff !important;
-    flex: 1 !important;
-}
-
-/* Asegurar que el body no tenga márgenes */
-body {
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-x: hidden !important;
-}
-
-/* Responsive */
-@media (max-width: 700px) {
-    .dashboard {
-        grid-template-columns: 1fr !important;
-    }
-    
-    .sidebar {
-        height: auto !important;
-    }
-    
-    #nVacante {
-        height: 70vh !important;
-    }
-}
-</style>
->>>>>>> Stashed changes
 </head>
 
 <body>
@@ -307,7 +223,6 @@ body {
         
         <div class="content">
             <h2>Publicar Nueva Vacante</h2>
-<<<<<<< Updated upstream
             
             <?php if (!empty($successMessage)): ?>
                 <div class="success-message"><?php echo htmlspecialchars($successMessage); ?></div>
@@ -411,10 +326,6 @@ body {
                 
                 <button type="submit">Publicar Vacante</button>
             </form>
-=======
-            <iframe id="nVacante" src="vista_nueva_vacante.php" frameborder="0"></iframe>
-            <div id="scroll-to-top">↑</div>
->>>>>>> Stashed changes
         </div>
     </div>
 </body>
