@@ -51,8 +51,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
+    // Depuración de la respuesta de autenticación
+    error_log("Respuesta completa de Auth: " . json_encode($authResponse));
+    
     // Obtener el ID del usuario recién registrado
-    $userId = $authResponse['user']['id'];
+    // La estructura puede variar, así que verificamos posibles ubicaciones del ID
+    $userId = null;
+    
+    if (isset($authResponse['user']) && isset($authResponse['user']['id'])) {
+        // Estructura esperada
+        $userId = $authResponse['user']['id'];
+    } elseif (isset($authResponse['id'])) {
+        // Estructura alternativa
+        $userId = $authResponse['id'];
+    } elseif (isset($authResponse['data']) && isset($authResponse['data']['user']) && isset($authResponse['data']['user']['id'])) {
+        // Otra posible estructura
+        $userId = $authResponse['data']['user']['id'];
+    }
+    
+    // Verificar que tenemos un ID válido
+    if (empty($userId)) {
+        error_log("ERROR: No se pudo extraer el ID del usuario de la respuesta de Supabase Auth: " . json_encode($authResponse));
+        header('Location: ../paginas/registro_candidato.php?error=Error al obtener el identificador del usuario');
+        exit;
+    }
+    
+    error_log("Usuario creado en Supabase Auth con ID: $userId");
     
     // Crear perfil de candidato
     $perfilData = [
@@ -60,16 +84,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'tipo_usuario' => 'candidato'
     ];
     
+    error_log("Intentando crear perfil con datos: " . json_encode($perfilData));
     $perfilResponse = supabaseInsert('perfiles', $perfilData);
     
     // Comprobar si hay errores al crear el perfil
     if (isset($perfilResponse['error'])) {
-        header('Location: ../paginas/registro_candidato.php?error=Error al crear el perfil de usuario');
+        error_log("Error al crear perfil: " . json_encode($perfilResponse));
+        header('Location: ../paginas/registro_candidato.php?error=' . urlencode('Error al crear el perfil de usuario: ' . $perfilResponse['message']));
         exit;
     }
     
-    // Obtener el ID del perfil recién creado
-    $perfilId = $perfilResponse[0]['id'];
+    // Verificar que recibimos una respuesta correcta con el nuevo perfil
+    // Supabase puede devolver diferentes formatos de respuesta exitosa
+    error_log("Respuesta al crear perfil: " . json_encode($perfilResponse));
+    
+    // Intentar obtener el ID del perfil recién creado de diferentes maneras
+    $perfilId = null;
+    
+    // Caso 1: Respuesta como array con objetos
+    if (is_array($perfilResponse) && !empty($perfilResponse) && isset($perfilResponse[0]['id'])) {
+        $perfilId = $perfilResponse[0]['id'];
+    }
+    // Caso 2: Respuesta directa con id
+    elseif (isset($perfilResponse['id'])) {
+        $perfilId = $perfilResponse['id'];
+    }
+    // Caso 3: Buscar el perfil recién creado por user_id
+    else {
+        // Si no podemos obtener el ID directamente, buscar el perfil por user_id
+        $perfilesResult = supabaseFetch('perfiles', '*', ['user_id' => $userId]);
+        
+        if (is_array($perfilesResult) && !empty($perfilesResult) && isset($perfilesResult[0]['id'])) {
+            $perfilId = $perfilesResult[0]['id'];
+        }
+    }
+    
+    // Verificar si se encontró un ID
+    if (empty($perfilId)) {
+        error_log("No se pudo obtener el ID del perfil creado. Respuesta: " . json_encode($perfilResponse));
+        header('Location: ../paginas/registro_candidato.php?error=Error: No se pudo identificar el perfil creado');
+        exit;
+    }
+    
+    error_log("Perfil creado con ID: $perfilId");
     
     // Crear datos del candidato
     $candidatoData = [
@@ -81,16 +138,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'anios_experiencia' => intval($experiencia)
     ];
     
+    error_log("Intentando crear candidato con datos: " . json_encode($candidatoData));
     $candidatoResponse = supabaseInsert('candidatos', $candidatoData);
     
     // Comprobar si hay errores al crear los datos del candidato
     if (isset($candidatoResponse['error'])) {
-        header('Location: ../paginas/registro_candidato.php?error=Error al guardar los datos del candidato');
+        error_log("Error al crear candidato: " . json_encode($candidatoResponse));
+        header('Location: ../paginas/registro_candidato.php?error=' . urlencode('Error al guardar los datos del candidato: ' . $candidatoResponse['message']));
         exit;
     }
     
-    // Registro exitoso, redirigir a la página de inicio de sesión con mensaje de éxito
-    header('Location: ../paginas/interfaz_iniciar_sesion.php?success=Registro exitoso. Ahora puedes iniciar sesión.');
+    // Verificar la respuesta al crear candidato
+    error_log("Respuesta al crear candidato: " . json_encode($candidatoResponse));
+    
+    // Intentar obtener el ID del candidato recién creado de diferentes maneras
+    $candidatoId = null;
+    
+    // Caso 1: Respuesta como array con objetos
+    if (is_array($candidatoResponse) && !empty($candidatoResponse) && isset($candidatoResponse[0]['id'])) {
+        $candidatoId = $candidatoResponse[0]['id'];
+    }
+    // Caso 2: Respuesta directa con id
+    elseif (isset($candidatoResponse['id'])) {
+        $candidatoId = $candidatoResponse['id'];
+    }
+    // Caso 3: Buscar el candidato recién creado por perfil_id
+    else {
+        // Si no podemos obtener el ID directamente, buscar el candidato por perfil_id
+        $candidatosResult = supabaseFetch('candidatos', '*', ['perfil_id' => $perfilId]);
+        
+        if (is_array($candidatosResult) && !empty($candidatosResult) && isset($candidatosResult[0]['id'])) {
+            $candidatoId = $candidatosResult[0]['id'];
+        }
+    }
+    
+    // Verificar si se encontró un ID, pero no salir con error si no se encuentra
+    // porque en este punto, el registro ya está prácticamente completo
+    if (empty($candidatoId)) {
+        error_log("No se pudo obtener el ID del candidato creado. Respuesta: " . json_encode($candidatoResponse));
+    } else {
+        error_log("Candidato creado exitosamente con ID: " . $candidatoId);
+    }
+    
+    // Registro exitoso, redirigir a la página de inicio de sesión (index.php) con mensaje de éxito
+    header('Location: ../index.php?success=Registro exitoso. Ahora puedes iniciar sesión.');
     exit;
     
 } else {

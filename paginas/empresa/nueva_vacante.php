@@ -5,7 +5,7 @@ require_once '../../config/supabase.php';
 
 // Verificar si el usuario está autenticado y es un reclutador
 if (!isset($_SESSION['access_token']) || !isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'reclutador') {
-    header('Location: ../interfaz_iniciar_sesion.php');
+    header('Location: ../../index.php');
     exit;
 }
 
@@ -14,7 +14,7 @@ $userId = $_SESSION['user']['id'];
 $userProfile = supabaseFetch('perfiles', '*', ['user_id' => $userId]);
 
 if (empty($userProfile) || isset($userProfile['error'])) {
-    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar el perfil');
+    header('Location: ../../index.php?error=Error al cargar el perfil');
     exit;
 }
 
@@ -22,7 +22,7 @@ if (empty($userProfile) || isset($userProfile['error'])) {
 $reclutadorData = supabaseFetch('reclutadores', '*', ['perfil_id' => $userProfile[0]['id']]);
 
 if (empty($reclutadorData) || isset($reclutadorData['error'])) {
-    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos del reclutador');
+    header('Location: ../../index.php?error=Error al cargar datos del reclutador');
     exit;
 }
 
@@ -30,7 +30,7 @@ if (empty($reclutadorData) || isset($reclutadorData['error'])) {
 $empresaData = supabaseFetch('empresas', '*', ['id' => $reclutadorData[0]['empresa_id']]);
 
 if (empty($empresaData) || isset($empresaData['error'])) {
-    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos de la empresa');
+    header('Location: ../../index.php?error=Error al cargar datos de la empresa');
     exit;
 }
 
@@ -197,6 +197,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../estilo/formularios.css">
     <link rel="stylesheet" href="../../estilo/conocimientos.css">
     <link rel="stylesheet" href="../../estilo/empresa_dashboard.css">
+    <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -326,8 +328,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <button type="submit">Publicar Vacante</button>
             </form>
+            
+            <div id="scroll-to-top">↑</div>
         </div>
     </div>
+
+    <script>
+        // Script para el botón de scroll hacia arriba
+        document.addEventListener('DOMContentLoaded', function() {
+            var scrollBtn = document.getElementById('scroll-to-top');
+            
+            // Mostrar/ocultar el botón basado en la posición del scroll
+            window.addEventListener('scroll', function() {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    scrollBtn.style.display = 'block';
+                } else {
+                    scrollBtn.style.display = 'none';
+                }
+            });
+            
+            // Scroll hacia arriba al hacer clic en el botón
+            scrollBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
            

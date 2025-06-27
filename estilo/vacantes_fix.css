@@ -95,6 +95,7 @@ html, body {
     overflow-x: hidden;
 }
 
+
 /* Corrección específica para el iframe de nueva vacante */
 body {
     margin: 0 !important;
@@ -115,3 +116,4 @@ body {
     padding: 20px !important;
     box-sizing: border-box;
 }
+

@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="../estilo/formularios.css">
 </head>
 
-<body>
-    <div class="contenedor">
+<body class="sinMar">
+    <div class="contenedor" >
         <div class="logo">
             <img src="../imagenes/logo.png" alt="Logo ChambaNet">
         </div>
@@ -34,7 +34,7 @@
             </div>
         </div>
         
-        <a href="interfaz_iniciar_sesion.php" class="volver">Volver a Inicio de Sesión</a>
+        <a href="../index.php" class="enlaces">Volver a Inicio de Sesión</a>
     </div>
 </body>
 </html>

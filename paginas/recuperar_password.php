@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../estilo/interfaz_iniciar_usuario.css">
 </head>
 
-<body>
+<body class="sinMar">
     <div class="contenedor">
         <div class="logo">
             <img src="../imagenes/logo.png" alt="Logo ChambaNet">
@@ -38,7 +38,7 @@
             <button type="submit">Enviar correo de recuperación</button>
         </form>
         
-        <a href="interfaz_iniciar_sesion.php" class="volver">Volver a Inicio de Sesión</a>
+        <a href="../index.php" class="enlaces">Volver a Inicio de Sesión</a>
     </div>
 </body>
 </html>

@@ -78,24 +78,13 @@
                 <input type="text" id="direccion" name="direccion" placeholder="Tu dirección completa" required>
             </div>
             
-            <h2>Datos profesionales</h2>
-            
-            <div class="form-group">
-                <label for="titulo">Título profesional</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Ej. Ingeniero en Redes">
-            </div>
-            
-            <div class="form-group">
-                <label for="experiencia">Años de experiencia*</label>
-                <input type="number" id="experiencia" name="experiencia" min="0" placeholder="Años de experiencia en el área" required>
-            </div>
-            
+            <input type="buttom" value="Continuar" onclick="window.location.href='./candidato/datosEyP_candidato.php'">
             <p>* Campos obligatorios</p>
             
-            <button type="submit">Registrarse</button>
+            
         </form>
         
-        <a href="elegir_registro.php" class="volver">Volver</a>
+        <a href="elegir_registro.php" class="enlaces">Volver</a>
     </div>
 </body>
 </html>

@@ -1,92 +1,67 @@
 body {
-
     font-family: Arial, sans-serif;
-
     background: linear-gradient(to top right, #ff0400, #f08d8d, #ffffff);
-
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
     height: 100vh;
-
-    margin: 0;
-
+    margin: 200px;
 }
-
-
+.sinMar{
+    margin: 0;
+}
+#canDash{
+    display: flex;
+    position: relative;
+    flex-direction: row;
+   
+    align-content: stretch;
+    justify-content: center;
+    align-items: center;
+    width: 800px;
+}
 
 .contenedor {
 
     background: linear-gradient(to bottom,
-
             #d9d6d6 10%,
             /* gris claro superior */
-
             #eeecec 30%,
             /* centro blanco */
-
             #ffffff 97%,
-
             #e1322f 100%);
-
     border-radius: 10px;
-
     padding: 30px;
-
     width: 600px;
-
     text-align: center;
-
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.199);
-
     border: none;
-    /* ya no necesitamos borde sólido */
+    margin-top: 50px;
 
 }
-
-
-
+#titB,#ttitB {
+    color:white;
+}
 h2 {
-
     color: #d63d3d;
-
     margin-bottom: 20px;
-
 }
-
-
 
 label {
-
     display: block;
-
     text-align: left;
-
     margin-top: 15px;
-
     margin-bottom: 5px;
-
     font-weight: bold;
-
 }
 
+input[type="email"], input[type="text"], input[type="tel"], input[type="date"], input[type="number"],
+input[type="password"], input[type="url"], input[type="file"] {
 
-
-input[type="email"], input[type="text"],
-
-input[type="password"] {
-
-    width: 100%;
-
+    width: 90%;
     padding: 10px;
-
     border-radius: 20px;
-
     border: 1px solid #ccc;
-
     outline: none;
 
 }
@@ -101,70 +76,38 @@ input[type="password"] {
     text-align: left;
 }
 
-
-
 button {
 
     width: 80%;
-
     padding: 10px;
-
     background: linear-gradient(to right, #d63d3d, #e44c4c);
-
     border: none;
-
     color: white;
-
     border-radius: 20px;
-
     font-size: 16px;
-
     margin-top: 20px;
-
     cursor: pointer;
-
     transition: background 0.3s;
 
 }
 
-
-
 button:hover {
-
     background: linear-gradient(to right, #c02c2c, #cc4444);
-
 }
-
-
 
 .enlaces {
-
     display: flex;
-
-    justify-content: space-between;
-
+    justify-content: center;
     margin-top: 20px;
-
-    font-size: 12px;
-
-}
-
-
-
-.enlaces a {
-
+    font-size: 16px;
     color: #d63d3d;
-
     text-decoration: none;
-
+    
 }
-
-
-
+#enlacesIs{
+    justify-content: space-between;
+}
 .logo img {
-
     width: 30px;
-
     float: right;
-
 }
