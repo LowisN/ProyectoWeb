@@ -53,9 +53,6 @@ $vacantes = supabaseFetch('vacantes', '*', ['empresa_id' => $empresaData[0]['id'
     <div class="contenedor dashboard">
         <div class="sidebar">
             <div class="company-info">
-                <?php echo $empresaData[0]['nombre']= '0'; ?>
-                <?php echo $reclutadorData[0]['nombre'] = '0';?>
-                <?php echo $reclutadorData[0]['apellidos'] = '0';?>
                 <img src="../../imagenes/logo.png" alt="Logo de la empresa">
                 <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3>
                 <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p>
