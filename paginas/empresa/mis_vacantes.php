@@ -453,12 +453,10 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     <div class="contenedor dashboard">
         <div class="sidebar">
             <div class="company-info">
-                <img src="../../imagenes/logo.png" alt="Logo de la empresa">
-                <h3><?php echo isset($empresaData[0]['nombre']) ? htmlspecialchars($empresaData[0]['nombre']) : 'Empresa'; ?></h3>
-                <p><?php 
-                    echo htmlspecialchars($userProfile[0]['nombre'] . ' ' . $userProfile[0]['apellido']);
-                ?></p>
-            </div>
+            <img src="../../imagenes/logo.png" alt="Logo de la empresa">
+            <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3>
+            <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p>
+        </div>
 
             <ul class="nav-menu">
                 <li><a href="home_empresa.php">Inicio</a></li>

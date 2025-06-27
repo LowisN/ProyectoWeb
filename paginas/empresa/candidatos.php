@@ -1,5 +1,38 @@
 <?php
-// candidatos.php - Página de gestión de candidatos
+
+session_start();
+require_once '../../config/supabase.php';
+
+// Verificar si el usuario está autenticado y es un reclutador
+if (!isset($_SESSION['access_token']) || !isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'reclutador') {
+    header('Location: ../interfaz_iniciar_sesion.php');
+    exit;
+}
+
+// Obtener información del usuario actual
+$userId = $_SESSION['user']['id'];
+$userProfile = supabaseFetch('perfiles', '*', ['user_id' => $userId]);
+
+if (empty($userProfile) || isset($userProfile['error'])) {
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar el perfil');
+    exit;
+}
+
+// Obtener datos del reclutador
+$reclutadorData = supabaseFetch('reclutadores', '*', ['perfil_id' => $userProfile[0]['id']]);
+
+if (empty($reclutadorData) || isset($reclutadorData['error'])) {
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos del reclutador');
+    exit;
+}
+
+// Obtener datos de la empresa
+$empresaData = supabaseFetch('empresas', '*', ['id' => $reclutadorData[0]['empresa_id']]);
+
+if (empty($empresaData) || isset($empresaData['error'])) {
+    header('Location: ../interfaz_iniciar_sesion.php?error=Error al cargar datos de la empresa');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -14,9 +47,10 @@
 
 <body>
     <div class="sidebar">
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 32px;">
-            <img src="../../imagenes/logo.png" alt="Logo de la empresa"
-                style="width: 100px; height: 100px; margin-bottom: 32px;">
+        <div class="company-info">
+            <img src="../../imagenes/logo.png" alt="Logo de la empresa">
+            <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3>
+            <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p>
         </div>
         <ul class="nav-menu" style="margin-top: 16px;">
             <li><a href="home_empresa.php">Inicio</a></li>
