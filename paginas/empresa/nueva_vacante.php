@@ -327,6 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 
                 <button type="submit">Publicar Vacante</button>
+                <button type="button" onclick="window.location.href='home_empresa.php'">Volver</button>
             </form>
             
             <div id="scroll-to-top">↑</div>
