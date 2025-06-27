@@ -29,8 +29,9 @@ body {
 .contenedor_perfil {
   position: relative;
   background: white;
+  padding-left: 60px;
   border-radius: var(--border-radius);
-  width: 100%;
+  width: 80%;
   overflow-y: auto;
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
