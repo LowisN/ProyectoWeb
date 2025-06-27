@@ -83,6 +83,7 @@ $empresa = $empresaData[0];
         <div class="content">
             <div class="contenedor_perfil">
 
+
    <div class="logo">
             <img src="../../imagenes/logo.png" alt="Logo">
     </div>
