@@ -1,5 +1,4 @@
 <?php 
-
 session_start();
 require_once '../../config/supabase.php';
 
@@ -185,6 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } 
     
 
+
 ?>
 
 <!DOCTYPE html>
@@ -206,8 +206,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="sidebar">
             <div class="company-info">
                 <img src="../../imagenes/logo.png" alt="Logo de la empresa">
-                <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3>
-                <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p>
+                <!-- <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3> -->
+                <!-- <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p> -->
             </div>
             
             <ul class="nav-menu">
