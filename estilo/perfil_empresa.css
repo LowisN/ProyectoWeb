@@ -35,7 +35,6 @@ body {
   overflow-y: auto;
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
-  border: 1px solid var(--gray-light);
   color: var(--gray-dark);
   text-align: center;
 }
