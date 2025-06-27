@@ -109,7 +109,69 @@ function supabaseFetch($table, $select = '*', $filters = []) {
 
 // Función para insertar datos en una tabla
 function supabaseInsert($table, $data) {
-    $response = supabaseRequest("/rest/v1/$table", 'POST', $data);
+    // Lista de campos que deberían ser enteros (1/0) en lugar de booleanos
+    $integerBooleanFields = ['destacada', 'obligatorio'];
+    
+    // Lista de campos que son IDs enteros (nunca deben convertirse a booleanos)
+    $integerIdFields = ['id', 'empresa_id', 'reclutador_id', 'vacante_id', 'habilidad_id', 'candidato_id', 'perfil_id', 'user_id'];
+    
+    // Preprocesar los datos para corregir valores booleanos
+    $processedData = array();
+    // Lista de campos de fecha que deberían ser NULL si están vacíos
+    $dateFields = ['fecha_expiracion', 'fecha_inicio', 'fecha_fin', 'fecha_nacimiento'];
+    
+    foreach ($data as $key => $value) {
+        // Si es valor nulo, mantenerlo como null
+        if ($value === null) {
+            $processedData[$key] = null;
+            continue;
+        }
+        
+        // Si es un campo de fecha y está vacío, tratarlo como null
+        if (in_array($key, $dateFields) && (trim($value) === '' || $value === '0000-00-00')) {
+            $processedData[$key] = null;
+            error_log("Campo de fecha '$key' vacío convertido a NULL");
+            continue;
+        }
+        
+        // Si el campo es un ID, asegurarse de que sea entero
+        if (in_array($key, $integerIdFields)) {
+            // Convertir a entero si no lo es ya y registrar para diagnóstico
+            $processedData[$key] = is_numeric($value) ? (int)$value : $value;
+            error_log("Campo ID '$key' procesado: " . gettype($value) . " → " . gettype($processedData[$key]) . 
+                     " (valor: $value → " . $processedData[$key] . ")");
+        }
+        // Si el campo está en la lista de campos de tipo entero-booleano
+        else if (in_array($key, $integerBooleanFields)) {
+            // Convertir cualquier valor booleano a entero (1/0)
+            if ($value === true || $value === "true" || $value === 1 || $value === "1" || $value === "on") {
+                $processedData[$key] = 1;
+            } else {
+                $processedData[$key] = 0;
+            }
+        }
+        // Campos que deben ser numéricos (pero no están en la lista de IDs)
+        else if (is_numeric($value) && (strpos($key, '_id') !== false || $key === 'anios_experiencia' || $key === 'salario')) {
+            // Asegurarse que los campos numéricos se envíen como números
+            $processedData[$key] = is_float($value + 0) ? (float)$value : (int)$value;
+        }
+        // Para campos booleanos regulares
+        else if ($value === true || $value === "true" || $value === 1 || $value === "1" || $value === "on") {
+            $processedData[$key] = true;
+        } 
+        else if ($value === false || $value === "false" || $value === 0 || $value === "0" || $value === "") {
+            $processedData[$key] = false;
+        }
+        // Mantener otros valores sin cambios
+        else {
+            $processedData[$key] = $value;
+        }
+    }
+    
+    // Registrar datos procesados para diagnóstico
+    error_log("Datos a insertar en $table (después del procesamiento): " . json_encode($processedData));
+    
+    $response = supabaseRequest("/rest/v1/$table", 'POST', $processedData);
     
     // Registrar la respuesta para debugging
     error_log("Respuesta de supabaseInsert para tabla $table: " . json_encode($response));
@@ -255,6 +317,35 @@ function supabaseCheckTableStructure($table) {
     // Obtener descripción de la tabla usando una función personalizada en Postgres (si está disponible)
     $describeResult = supabaseRequest("/rest/v1/rpc/describe_table", "POST", ["table_name" => $table]);
     
+    return [
+        'exists' => true,
+        'sample' => $result,
+        'description' => isset($describeResult['error']) ? null : $describeResult
+    ];
+}
+
+// Función para verificar la estructura de una tabla
+function supabaseDescribeTable($table) {
+    // Verificar que la tabla existe
+    $result = supabaseFetch($table, '*', [], 1);
+    
+    if (isset($result['error']) || (is_array($result) && isset($result['code']))) {
+        return [
+            'exists' => false,
+            'error' => $result,
+            'message' => "La tabla $table no existe o no es accesible"
+        ];
+    }
+    
+    // Intentar obtener descripción de la tabla directamente (aunque esto puede no estar disponible)
+    // Este es un enfoque genérico. La función real podría ser diferente según cómo esté configurada la base de datos
+    $describeQuery = "SELECT column_name, data_type, is_nullable 
+                     FROM information_schema.columns 
+                     WHERE table_name = '$table'";
+                     
+    $describeResult = supabaseRequest("/rest/v1/rpc/execute_sql", "POST", ["query" => $describeQuery]);
+    
+    // Si no funciona el enfoque directo, al menos devolvemos una muestra de datos
     return [
         'exists' => true,
         'sample' => $result,
