@@ -316,8 +316,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img src="../../imagenes/logo.png" alt="Logo de la empresa">
                 <h3><?php echo isset($empresaData[0]['nombre']) ? htmlspecialchars($empresaData[0]['nombre']) : 'Empresa'; ?></h3>
                 <p><?php 
-                    echo htmlspecialchars($nombreCompleto);
-                ?></p>
+                    echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']);                ?></p>
             </div>
             
             <ul class="nav-menu">
