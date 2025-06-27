@@ -49,10 +49,12 @@ $empresa = $empresaData[0];
 </head>
 <body>
       <div class="sidebar">
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 32px;">
-            <img src="../../imagenes/logo.png" alt="Logo de la empresa"
-                style="width: 100px; height: 100px; margin-bottom: 32px;">
-        </div>
+         <div class="company-info">
+                <img src="../../imagenes/logo.png" alt="Logo de la empresa">
+                <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3>
+                <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p>
+            </div>
+  
         <ul class="nav-menu" style="margin-top: 16px;">
             <li><a href="home_empresa.php">Inicio</a></li>
             <li>
