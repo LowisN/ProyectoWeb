@@ -46,13 +46,17 @@
     color: white;
 }
 
+/* Contenedor principal sin restricciones de ancho */
 .content {
     padding: 20px;
+    width: 100%;
+    /* Removido display: flex y align-items: center */
 }
 
 .content h2 {
     color: #d63d3d;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .section {
@@ -107,4 +111,37 @@ textarea {
 .logout a {
     color: #d63d3d;
     text-decoration: none;
+}
+
+#nVacante {
+    width: 100%;  /* Usa todo el ancho disponible */
+    height: 600px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: block;
+    background: #fff;
+    /* Removido: margin: 0 auto; */
+    /* Removido: max-width y min-width */
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .sidebar {
+        order: 2;
+    }
+    
+    .content {
+        order: 1;
+        padding: 10px;
+    }
+    
+    #nVacante {
+        height: 400px;
+    }
 }

@@ -1,4 +1,5 @@
-<?php
+<?php 
+/*
 session_start();
 require_once '../../config/supabase.php';
 
@@ -181,7 +182,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Refresh: 2; URL=home_empresa.php');
         }
     }
-}
+} 
+    */
+
 ?>
 
 <!DOCTYPE html>
@@ -202,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="contenedor dashboard">
         <div class="sidebar">
             <div class="company-info">
-                <img src="../../imagenes/company-default.png" alt="Logo de la empresa">
+                <img src="../../imagenes/logo.png" alt="Logo de la empresa">
                 <h3><?php echo htmlspecialchars($empresaData[0]['nombre']); ?></h3>
                 <p><?php echo htmlspecialchars($reclutadorData[0]['nombre'] . ' ' . $reclutadorData[0]['apellidos']); ?></p>
             </div>
@@ -352,6 +355,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             });
         });
+    </script>
+</body>
+</html>
+           
     </script>
 </body>
 </html>
