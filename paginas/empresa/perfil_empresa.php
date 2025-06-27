@@ -53,7 +53,6 @@ $empresa = $empresaData[0];
     <link rel="stylesheet" href="../../estilo/vacantes_fix.css">
     <link rel="stylesheet" href="../../estilo/perfil_empresa.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
 </head>
 
 <body>
@@ -82,7 +81,6 @@ $empresa = $empresaData[0];
         
         <div class="content">
             <div class="contenedor_perfil">
-
    <div class="logo">
             <img src="../../imagenes/logo.png" alt="Logo">
     </div>
