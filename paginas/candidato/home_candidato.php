@@ -54,7 +54,6 @@ $vacantes = supabaseFetch('vacantes', '*');
             <ul class="nav-menu">
                 <li><a href="#" class="active">Inicio</a></li>
                 <li><a href="actualizar_perfil.php">Mi Perfil</a></li>
-                <li><a href="mis_postulaciones.php">Mis Postulaciones</a></li>
                 <li><a href="actualizar_conocimientos.php">Mis Conocimientos</a></li>
             </ul>
             
@@ -76,7 +75,7 @@ $vacantes = supabaseFetch('vacantes', '*');
                     <?php foreach ($vacantes as $vacante): ?>
                         <div class="vacante-card">
                             <h3><?php echo htmlspecialchars($vacante['titulo']); ?></h3>
-                            <div class="empresa"><?php echo htmlspecialchars($vacante['empresa_nombre']); ?></div>
+                 
                             <p><?php echo htmlspecialchars(substr($vacante['descripcion'], 0, 100)) . '...'; ?></p>
                             <div class="detalles">
                                 <span>Salario: $<?php echo number_format($vacante['salario'], 2); ?></span>

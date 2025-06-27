@@ -90,7 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <ul class="nav-menu">
                 <li><a href="home_candidato.php">Inicio</a></li>
                 <li><a href="#" class="active">Mi Perfil</a></li>
-                <li><a href="mis_postulaciones.php">Mis Postulaciones</a></li>
                 <li><a href="actualizar_conocimientos.php">Mis Conocimientos</a></li>
             </ul>
             
@@ -171,27 +170,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         
                         <button type="submit">Guardar Cambios</button>
-                    </form>
-                </div>
-                
-                <div class="section">
-                    <h3>Currículum Vitae</h3>
-                    
-                    <p>Sube tu CV actualizado. Formatos permitidos: PDF, DOC, DOCX (Máximo 5MB)</p>
-                    
-                    <form action="../../controllers/upload_cv_controller.php" method="POST" enctype="multipart/form-data">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="cv_file">Archivo CV</label>
-                                <input type="file" id="cv_file" name="cv_file" accept=".pdf,.doc,.docx">
-                            </div>
-                        </div>
-                        
-                        <?php if (!empty($candidato['cv_url'])): ?>
-                            <p>CV actual: <a href="<?php echo htmlspecialchars($candidato['cv_url']); ?>" target="_blank">Ver CV</a></p>
-                        <?php endif; ?>
-                        
-                        <button type="submit">Subir CV</button>
                     </form>
                 </div>
             </div>

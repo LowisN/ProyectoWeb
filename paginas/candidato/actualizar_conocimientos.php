@@ -95,12 +95,6 @@ $habilidades = [
 $conocimientos = supabaseFetch('conocimientos_candidato', '*', ['candidato_id' => $candidato['id']]);
 
 // Crear un array asociativo para facilitar el acceso
-$conocimientosCandidato = [];
-if (!empty($conocimientos) && !isset($conocimientos['error'])) {
-    foreach ($conocimientos as $conocimiento) {
-        $conocimientosCandidato[$conocimiento['tecnologia']] = $conocimiento['nivel'];
-    }
-}
 
 // Procesar el formulario si se ha enviado
 $successMessage = '';
@@ -183,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../estilo/candidato_dashboard.css">
 </head>
 
-<body>
+<body class="dashboard">
     <div class="contenedor dashboard">
         <div class="sidebar">
             <div class="user-info">
